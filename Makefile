@@ -26,14 +26,18 @@ backend: ## Run backend server
 frontend: ## Run frontend dev server
 	cd apeye-frontend && npm run dev
 
-test: ## Run all tests
-	@echo "Running backend tests..."
-	cd apeye-backend && go test ./...
-	@echo "Running frontend tests..."
-	cd apeye-frontend && npm test
+db-reset: ## Reset database (drop and recreate)
+	docker-compose down -v
+	docker-compose up -d
+	@echo "⏳ Waiting for database to be ready..."
+	@sleep 3
+	@echo "Database reset complete. Run 'make backend' to recreate tables."
 
-clean: ## Clean up Docker volumes and dependencies
+db-connect: ## Connect to PostgreSQL
+	docker exec -it apeye-postgres psql -U postgres -d apeye
+
+clean: ## Clean up everything
 	docker-compose down -v
 	rm -rf apeye-frontend/node_modules
 	rm -rf apeye-frontend/.next
-	@echo "✅ Cleaned up"
+	@echo "Cleaned up"
