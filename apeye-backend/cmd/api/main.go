@@ -1,40 +1,16 @@
-// package main
-
-// import (
-// 	"log"
-
-// 	"github.com/Akash-YS05/apeye-app/apeye-backend/config"
-// 	"github.com/gin-gonic/gin"
-// )
-
-// func main() {
-// 	cfg := config.Load()
-
-// 	gin.SetMode(cfg.Server.GinMode)
-
-// 	router := gin.Default()
-
-// 	router.GET("/health", func(c *gin.Context) {
-// 		c.JSON(200, gin.H{
-// 			"status": "OK",
-// 			"message": "APEye server is running",
-// 		})
-// 	})
-
-// 	log.Printf("Port starting on server %s", cfg.Server.Port)
-// 	if err := router.Run(":" + cfg.Server.Port); err != nil {
-// 		log.Fatal("Failed to start server: ", err)
-// 	}
-// }
-
 package main
 
 import (
 	"log"
 
-	"github.com/gin-gonic/gin"
 	"github.com/Akash-YS05/apeye-app/apeye-backend/config"
+	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/handlers"
+	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/middleware"
+	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/repository"
+	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/routes"
+	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/services"
 	"github.com/Akash-YS05/apeye-app/apeye-backend/pkg/database"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -59,30 +35,18 @@ func main() {
 	// 	}
 	// }
 
+	userRepo := repository.NewUserRepository(database.GetDB())
+
+	authService := services.NewAuthService(userRepo, cfg)
+
+	authHandler := handlers.NewAuthHandler(authService)
+
 	router := gin.Default()
 
-	router.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"status":   "ok",
-			"message":  "APEye API is running",
-			"database": "connected",
-		})
-	})
+	router.Use(middleware.CORSMiddleware(cfg))
 
-	router.GET("/health/db", func(c *gin.Context) {
-		sqlDB, err := database.DB.DB()
-		if err != nil {
-			c.JSON(500, gin.H{"status": "error", "message": err.Error()})
-			return
-		}
+	routes.SetupRoutes(router, authHandler, cfg)
 
-		if err := sqlDB.Ping(); err != nil {
-			c.JSON(500, gin.H{"status": "error", "message": "Database ping failed"})
-			return
-		}
-
-		c.JSON(200, gin.H{"status": "ok", "message": "Database is healthy"})
-	})
 
 	log.Printf("Starting server on port %s", cfg.Server.Port)
 	if err := router.Run(":" + cfg.Server.Port); err != nil {
