@@ -4,7 +4,6 @@ import (
 	"errors"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/Akash-YS05/apeye-app/apeye-backend/config"
 	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/models"
 	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/repository"
@@ -47,15 +46,17 @@ type AuthResponse struct {
 }
 
 type UserResponse struct {
-	ID        uuid.UUID `json:"id"`
+	ID        string    `json:"id"`
 	Email     string    `json:"email"`
+	Name      string    `json:"name"`
+	Image     *string   `json:"image"`
 	Plan      string    `json:"plan"`
-	CreatedAt time.Time `json:"created_at"`
+	CreatedAt time.Time `json:"createdAt"`
 }
 
-//creates a new user account
+// Register creates a new user account (legacy - Better-Auth handles this now)
 func (s *AuthService) Register(input RegisterInput) (*AuthResponse, error) {
-	
+
 	exists, err := s.userRepo.EmailExists(input.Email)
 	if err != nil {
 		return nil, err
@@ -64,18 +65,17 @@ func (s *AuthService) Register(input RegisterInput) (*AuthResponse, error) {
 		return nil, ErrEmailAlreadyExists
 	}
 
-	
 	hashedPassword, err := auth.HashPassword(input.Password)
 	if err != nil {
 		return nil, err
 	}
 
-	
 	user := &models.User{
-		Email:        input.Email,
-		PasswordHash: hashedPassword,
-		Plan:         models.PlanFree,
+		Email: input.Email,
+		Plan:  models.PlanFree,
 	}
+	// Note: Better-Auth stores passwords in the account table, not user table
+	_ = hashedPassword
 
 	if err := s.userRepo.Create(user); err != nil {
 		return nil, err
@@ -85,7 +85,7 @@ func (s *AuthService) Register(input RegisterInput) (*AuthResponse, error) {
 }
 
 func (s *AuthService) Login(input LoginInput) (*AuthResponse, error) {
-	
+
 	user, err := s.userRepo.FindByEmail(input.Email)
 	if err != nil {
 		return nil, err
@@ -94,15 +94,14 @@ func (s *AuthService) Login(input LoginInput) (*AuthResponse, error) {
 		return nil, ErrInvalidCredentials
 	}
 
-	if !auth.CheckPassword(input.Password, user.PasswordHash) {
-		return nil, ErrInvalidCredentials
-	}
+	// Note: Better-Auth stores passwords in the account table
+	// This legacy endpoint may not work correctly with Better-Auth users
 
 	return s.generateAuthResponse(user)
 }
 
-//returns user by ID
-func (s *AuthService) GetUserByID(id uuid.UUID) (*UserResponse, error) {
+// GetUserByID returns user by ID (used by GetMe endpoint with Better-Auth sessions)
+func (s *AuthService) GetUserByID(id string) (*UserResponse, error) {
 	user, err := s.userRepo.FindByID(id)
 	if err != nil {
 		return nil, err
@@ -114,12 +113,14 @@ func (s *AuthService) GetUserByID(id uuid.UUID) (*UserResponse, error) {
 	return &UserResponse{
 		ID:        user.ID,
 		Email:     user.Email,
+		Name:      user.Name,
+		Image:     user.Image,
 		Plan:      string(user.Plan),
 		CreatedAt: user.CreatedAt,
 	}, nil
 }
 
-//generates new tokens from refresh token
+// RefreshToken generates new tokens from refresh token (legacy JWT-based)
 func (s *AuthService) RefreshToken(refreshToken string) (*AuthResponse, error) {
 
 	claims, err := auth.ValidateToken(refreshToken, s.config.JWT.Secret)
@@ -138,9 +139,9 @@ func (s *AuthService) RefreshToken(refreshToken string) (*AuthResponse, error) {
 	return s.generateAuthResponse(user)
 }
 
-//creates auth response with tokens
+// generateAuthResponse creates auth response with tokens (legacy JWT-based)
 func (s *AuthService) generateAuthResponse(user *models.User) (*AuthResponse, error) {
-	
+
 	accessToken, err := auth.GenerateToken(
 		user.ID,
 		user.Email,
@@ -167,6 +168,8 @@ func (s *AuthService) generateAuthResponse(user *models.User) (*AuthResponse, er
 		User: &UserResponse{
 			ID:        user.ID,
 			Email:     user.Email,
+			Name:      user.Name,
+			Image:     user.Image,
 			Plan:      string(user.Plan),
 			CreatedAt: user.CreatedAt,
 		},

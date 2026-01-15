@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 )
 
 var (
@@ -14,14 +13,14 @@ var (
 )
 
 type JWTClaims struct {
-	UserID uuid.UUID `json:"user_id"`
-	Email  string    `json:"email"`
-	Plan   string    `json:"plan"`
+	UserID string `json:"user_id"`
+	Email  string `json:"email"`
+	Plan   string `json:"plan"`
 	jwt.RegisteredClaims
 }
 
-//creates a new JWT token
-func GenerateToken(userID uuid.UUID, email, plan, secret string, expiry time.Duration) (string, error) {
+// GenerateToken creates a new JWT token (legacy - Better-Auth handles auth now)
+func GenerateToken(userID string, email, plan, secret string, expiry time.Duration) (string, error) {
 	claims := JWTClaims{
 		UserID: userID,
 		Email:  email,
@@ -37,7 +36,7 @@ func GenerateToken(userID uuid.UUID, email, plan, secret string, expiry time.Dur
 	return token.SignedString([]byte(secret))
 }
 
-//validates and parses a JWT token
+// ValidateToken validates and parses a JWT token (legacy - Better-Auth handles auth now)
 func ValidateToken(tokenString, secret string) (*JWTClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
 		// Verify signing method

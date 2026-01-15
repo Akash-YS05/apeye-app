@@ -1,0 +1,77 @@
+'use client';
+
+import { Menu, User, LogOut } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useSession, signOut } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+
+interface HeaderProps {
+  onToggleSidebar: () => void;
+}
+
+export default function Header({ onToggleSidebar }: HeaderProps) {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await signOut();
+    toast.success('Logged out successfully');
+    router.push('/login');
+  };
+
+  return (
+    <header className="h-14 border-b flex items-center justify-between px-4 bg-white dark:bg-gray-800">
+      <div className="flex items-center gap-3">
+        <Button variant="ghost" size="icon" onClick={onToggleSidebar}>
+          <Menu className="h-5 w-5" />
+        </Button>
+        <h1 className="text-xl font-bold">APEye</h1>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <div className="text-sm">
+          <span className="text-gray-500">Plan: </span>
+          <span className="font-medium capitalize">Free</span>
+        </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              {session?.user?.image ? (
+                <img 
+                  src={session.user.image} 
+                  alt={session.user.name || 'User'} 
+                  className="h-8 w-8 rounded-full"
+                />
+              ) : (
+                <User className="h-5 w-5" />
+              )}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">{session?.user?.name || 'User'}</span>
+                <span className="text-xs text-gray-500">{session?.user?.email}</span>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Logout</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </header>
+  );
+}

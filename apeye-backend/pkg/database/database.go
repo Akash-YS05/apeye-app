@@ -48,9 +48,17 @@ func Connect(cfg *config.DatabaseConfig) error {
 }
 
 // AutoMigrate runs automatic migrations
+// NOTE: User, Session, Account, and Verification tables are managed by Better-Auth
+// We only migrate application-specific tables here
 func AutoMigrate() error {
 	err := DB.AutoMigrate(
-		&models.User{},
+		// Better-Auth managed tables - DO NOT migrate these here
+		// &models.User{},
+		// &models.Session{},
+		// &models.Account{},
+		// &models.Verification{},
+
+		// Application-specific tables
 		&models.Workspace{},
 		&models.Collection{},
 		&models.Request{},
@@ -58,11 +66,11 @@ func AutoMigrate() error {
 		&models.History{},
 		&models.Subscription{},
 	)
-	
+
 	if err != nil {
 		return fmt.Errorf("failed to auto migrate: %w", err)
 	}
-	
+
 	log.Println("✅ Database migrations completed")
 	return nil
 }

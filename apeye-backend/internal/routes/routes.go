@@ -3,13 +3,14 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/Akash-YS05/apeye-app/apeye-backend/config"
-	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/handlers"
 	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/middleware"
 )
 
-func SetupRoutes(router *gin.Engine, authHandler *handlers.AuthHandler, cfg *config.Config) {
-	api := router.Group("/api/v1")
+func SetupRoutes(router *gin.Engine, cfg *config.Config) {
+	// API v1 group
+	api := router.Group("/api")
 	{
+		// Public health check
 		api.GET("/health", func(c *gin.Context) {
 			c.JSON(200, gin.H{
 				"status":  "ok",
@@ -17,21 +18,22 @@ func SetupRoutes(router *gin.Engine, authHandler *handlers.AuthHandler, cfg *con
 			})
 		})
 
-		auth := api.Group("/auth")
-		{
-			auth.POST("/register", authHandler.Register)
-			auth.POST("/login", authHandler.Login)
-			auth.POST("/refresh", authHandler.RefreshToken)
-		}
-
-		//protected routes
+		// Protected routes - require Better-Auth session
 		protected := api.Group("")
-		protected.Use(middleware.AuthMiddleware(cfg))
+		protected.Use(middleware.SessionMiddleware(cfg))
 		{
-			// User routes
-			protected.GET("/auth/me", authHandler.GetMe)
+			// User info (from session)
+			protected.GET("/user/me", func(c *gin.Context) {
+				userID, _ := c.Get("user_id")
+				userEmail, _ := c.Get("user_email")
+				
+				c.JSON(200, gin.H{
+					"id":    userID,
+					"email": userEmail,
+				})
+			})
 			
-			// Future routes will go here
+			// Future API routes will go here
 			// protected.GET("/collections", collectionHandler.List)
 			// protected.POST("/requests/execute", requestHandler.Execute)
 		}

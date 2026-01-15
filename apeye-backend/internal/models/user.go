@@ -14,29 +14,34 @@ const (
 	PlanPro  PlanType = "pro"
 )
 
+// User model - Better-Auth compatible
+// Better-Auth expects: id, name, email, emailVerified, image, createdAt, updatedAt
+// NOTE: This table is managed by Better-Auth, GORM should NOT auto-migrate it
 type User struct {
-	ID           uuid.UUID `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
-	Email        string    `gorm:"type:varchar(255);uniqueIndex;not null" json:"email" binding:"required,email"`
-	PasswordHash string    `gorm:"type:varchar(255);not null" json:"-"`
-	Plan         PlanType  `gorm:"type:varchar(20);default:'free'" json:"plan"`
-	CreatedAt    time.Time `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt    time.Time `gorm:"autoUpdateTime" json:"updated_at"`
-	
-	// Relationships
-	Workspaces    []Workspace    `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE" json:"workspaces,omitempty"`
-	Subscriptions []Subscription `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE" json:"subscriptions,omitempty"`
-	History       []History      `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE" json:"history,omitempty"`
+	ID            string    `gorm:"type:varchar(255);primary_key" json:"id"`
+	Email         string    `gorm:"type:varchar(255);uniqueIndex;not null" json:"email"`
+	EmailVerified bool      `gorm:"type:boolean;default:false;column:emailVerified" json:"emailVerified"`
+	Name          string    `gorm:"type:varchar(255)" json:"name"`
+	Image         *string   `gorm:"type:text" json:"image"`
+	Plan          PlanType  `gorm:"type:varchar(20);default:'free'" json:"plan"`
+	CreatedAt     time.Time `gorm:"autoCreateTime;column:createdAt" json:"createdAt"`
+	UpdatedAt     time.Time `gorm:"autoUpdateTime;column:updatedAt" json:"updatedAt"`
+
+	// Relationships - use gorm:"-" to prevent auto-migration of related tables
+	Workspaces    []Workspace    `gorm:"-" json:"workspaces,omitempty"`
+	Subscriptions []Subscription `gorm:"-" json:"subscriptions,omitempty"`
+	History       []History      `gorm:"-" json:"history,omitempty"`
+	Sessions      []Session      `gorm:"-" json:"sessions,omitempty"`
+	Accounts      []Account      `gorm:"-" json:"accounts,omitempty"`
 }
 
-//hook to generate UUID
 func (u *User) BeforeCreate(tx *gorm.DB) error {
-	if u.ID == uuid.Nil {
-		u.ID = uuid.New()
+	if u.ID == "" {
+		u.ID = uuid.New().String()
 	}
 	return nil
 }
 
-//TableName specifies the table name
 func (User) TableName() string {
-	return "users"
+	return "user"
 }
