@@ -28,6 +28,9 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
     router.push('/login');
   };
 
+  // Get plan from session, fallback to 'free'
+  const userPlan = (session?.user as any)?.plan || 'free';
+
   return (
     <header className="h-14 border-b flex items-center justify-between px-4 bg-white dark:bg-gray-800">
       <div className="flex items-center gap-3">
@@ -40,7 +43,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
       <div className="flex items-center gap-4">
         <div className="text-sm">
           <span className="text-gray-500">Plan: </span>
-          <span className="font-medium capitalize">Free</span>
+          <span className="font-medium capitalize">{userPlan}</span>
         </div>
 
         <DropdownMenu>
@@ -60,8 +63,12 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>
               <div className="flex flex-col">
-                <span className="text-sm font-medium">{session?.user?.name || 'User'}</span>
-                <span className="text-xs text-gray-500">{session?.user?.email}</span>
+                <span className="text-sm font-medium">
+                  {session?.user?.name || 'User'}
+                </span>
+                <span className="text-xs text-gray-500">
+                  {session?.user?.email}
+                </span>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
