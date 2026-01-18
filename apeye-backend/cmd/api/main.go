@@ -33,12 +33,17 @@ func main() {
 
 	// Initialize repositories
 	historyRepo := repository.NewHistoryRepository(database.GetDB())
+	collectionRepo := repository.NewCollectionRepository(database.GetDB())
+	workspaceRepo := repository.NewWorkspaceRepository(database.GetDB())
+	requestRepo := repository.NewRequestRepository(database.GetDB())
 
 	// Initialize services
 	requestService := services.NewRequestService(historyRepo)
+	collectionService := services.NewCollectionService(collectionRepo, workspaceRepo, requestRepo)
 
 	// Initialize handlers
 	requestHandler := handlers.NewRequestHandler(requestService)
+	collectionHandler := handlers.NewCollectionHandler(collectionService)
 
 	// Initialize router
 	router := gin.Default()
@@ -47,12 +52,13 @@ func main() {
 	router.Use(middleware.CORSMiddleware(cfg))
 
 	// Setup routes
-	routes.SetupRoutes(router, cfg, requestHandler)
+	routes.SetupRoutes(router, cfg, requestHandler, collectionHandler)
 
 	// Start server
 	log.Printf("🚀 Server starting on port %s", cfg.Server.Port)
 	log.Println("📝 Authentication handled by Better-Auth on frontend")
 	log.Println("🔥 HTTP client ready to execute requests")
+	log.Println("📁 Collections management enabled")
 	
 	if err := router.Run(":" + cfg.Server.Port); err != nil {
 		log.Fatal("Failed to start server:", err)

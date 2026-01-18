@@ -7,7 +7,12 @@ import (
 	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/middleware"
 )
 
-func SetupRoutes(router *gin.Engine, cfg *config.Config, requestHandler *handlers.RequestHandler) {
+func SetupRoutes(
+	router *gin.Engine,
+	cfg *config.Config,
+	requestHandler *handlers.RequestHandler,
+	collectionHandler *handlers.CollectionHandler,
+) {
 	// API group
 	api := router.Group("/api")
 	{
@@ -23,7 +28,7 @@ func SetupRoutes(router *gin.Engine, cfg *config.Config, requestHandler *handler
 		protected := api.Group("")
 		protected.Use(middleware.SessionMiddleware(cfg))
 		{
-			// User info (from session)
+			// User info
 			protected.GET("/user/me", func(c *gin.Context) {
 				userID, _ := c.Get("user_id")
 				userEmail, _ := c.Get("user_email")
@@ -38,6 +43,17 @@ func SetupRoutes(router *gin.Engine, cfg *config.Config, requestHandler *handler
 			
 			// Execute API request
 			protected.POST("/requests/execute", requestHandler.ExecuteRequest)
+
+			// Collections
+			protected.GET("/collections", collectionHandler.ListCollections)
+			protected.POST("/collections", collectionHandler.CreateCollection)
+			protected.GET("/collections/:id", collectionHandler.GetCollection)
+			protected.PUT("/collections/:id", collectionHandler.UpdateCollection)
+			protected.DELETE("/collections/:id", collectionHandler.DeleteCollection)
+
+			// Saved Requests
+			protected.POST("/requests", collectionHandler.SaveRequest)
+			protected.DELETE("/requests/:id", collectionHandler.DeleteRequest)
 		}
 	}
 }
