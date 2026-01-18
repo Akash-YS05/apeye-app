@@ -14,10 +14,26 @@ import (
 // SessionMiddleware validates Better-Auth session
 func SessionMiddleware(cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Get session token from cookie
-		sessionToken, err := c.Cookie("better-auth.session_token")
-		if err != nil || sessionToken == "" {
-			// Try Authorization header as fallback
+		var sessionToken string
+		
+		// Get raw cookie value from Cookie header
+		cookieHeader := c.GetHeader("Cookie")
+		if cookieHeader != "" {
+			// Parse cookies manually to avoid URL decoding
+			cookies := strings.Split(cookieHeader, "; ")
+			for _, cookie := range cookies {
+				parts := strings.SplitN(cookie, "=", 2)
+				if len(parts) == 2 {
+					if parts[0] == "better-auth.session_token" || parts[0] == "session_token" {
+						sessionToken = parts[1]
+						break
+					}
+				}
+			}
+		}
+		
+		// Try Authorization header as fallback
+		if sessionToken == "" {
 			authHeader := c.GetHeader("Authorization")
 			if authHeader != "" {
 				parts := strings.SplitN(authHeader, " ", 2)
@@ -33,13 +49,21 @@ func SessionMiddleware(cfg *config.Config) gin.HandlerFunc {
 			return
 		}
 
-		// Verify session in database
-		// Better-Auth stores the session token value in the cookie, not the session ID
+		// Better-Auth token format: {token}.{signature}
+		// We only need the token part (before the dot)
+		tokenParts := strings.Split(sessionToken, ".")
+		if len(tokenParts) > 0 {
+			sessionToken = tokenParts[0]
+		}
+
+		// Verify session in database using token field
 		var session models.Session
 		result := database.DB.Where("token = ?", sessionToken).First(&session)
 
 		if result.Error != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid session"})
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": "Invalid or expired session",
+			})
 			c.Abort()
 			return
 		}

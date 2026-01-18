@@ -22,8 +22,16 @@ func Connect(cfg *config.DatabaseConfig) error {
 	)
 
 	var err error
+	
+	// Logger Levels:
+	// logger.Silent  // No logs at all (cleanest)
+	// logger.Error   // Only errors (recommended for production)
+	// logger.Warn    // Errors + warnings
+	// logger.Info    // Everything including slow queries (your current setting)
+	// Set logger to Error level only (or Silent for no logs)
+	
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+		Logger: logger.Default.LogMode(logger.Error), // Changed from logger.Info
 		NowFunc: func() time.Time {
 			return time.Now().UTC()
 		},
@@ -48,17 +56,9 @@ func Connect(cfg *config.DatabaseConfig) error {
 }
 
 // AutoMigrate runs automatic migrations
-// NOTE: User, Session, Account, and Verification tables are managed by Better-Auth
-// We only migrate application-specific tables here
 func AutoMigrate() error {
+	// Only migrate tables that GORM manages (not Better-Auth tables)
 	err := DB.AutoMigrate(
-		// Better-Auth managed tables - DO NOT migrate these here
-		// &models.User{},
-		// &models.Session{},
-		// &models.Account{},
-		// &models.Verification{},
-
-		// Application-specific tables
 		&models.Workspace{},
 		&models.Collection{},
 		&models.Request{},
@@ -66,11 +66,11 @@ func AutoMigrate() error {
 		&models.History{},
 		&models.Subscription{},
 	)
-
+	
 	if err != nil {
 		return fmt.Errorf("failed to auto migrate: %w", err)
 	}
-
+	
 	log.Println("✅ Database migrations completed")
 	return nil
 }
