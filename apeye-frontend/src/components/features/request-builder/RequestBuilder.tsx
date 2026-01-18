@@ -1,6 +1,7 @@
 'use client';
 
-import { Send } from 'lucide-react';
+import { useState } from 'react';
+import { Send, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -10,8 +11,11 @@ import { HTTP_METHODS } from '@/config/constants';
 import KeyValueInput from './KeyValueInput';
 import AuthTab from './AuthTab';
 import BodyTab from './BodyTab';
+import SaveRequestDialog from '../collections/SaveRequestDialog';
 
 export default function RequestBuilder() {
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  
   const {
     config,
     isLoading,
@@ -50,6 +54,15 @@ export default function RequestBuilder() {
             onChange={(e) => setUrl(e.target.value)}
             className="flex-1"
           />
+
+          <Button
+            variant="outline"
+            onClick={() => setSaveDialogOpen(true)}
+            disabled={!config.url.trim()}
+          >
+            <Save className="h-4 w-4 mr-2" />
+            Save
+          </Button>
 
           <Button
             onClick={executeRequest}
@@ -112,6 +125,12 @@ export default function RequestBuilder() {
           </div>
         </Tabs>
       </div>
+
+      {/* Save Request Dialog */}
+      <SaveRequestDialog
+        open={saveDialogOpen}
+        onOpenChange={setSaveDialogOpen}
+      />
     </div>
   );
 }

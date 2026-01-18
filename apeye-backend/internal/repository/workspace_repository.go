@@ -38,7 +38,8 @@ func (r *WorkspaceRepository) FindByID(id uuid.UUID) (*models.Workspace, error) 
 // FindByUserID finds all workspaces for a user
 func (r *WorkspaceRepository) FindByUserID(userID string) ([]models.Workspace, error) {
 	var workspaces []models.Workspace
-	err := r.db.Where("user_id = ?", userID).
+	//case-sensitive match (annoying bug)
+	err := r.db.Where(`"userId" = ?`, userID).
 		Preload("Collections").
 		Order("created_at DESC").
 		Find(&workspaces).Error
@@ -48,7 +49,8 @@ func (r *WorkspaceRepository) FindByUserID(userID string) ([]models.Workspace, e
 // FindDefaultByUserID finds or creates default workspace for user
 func (r *WorkspaceRepository) FindDefaultByUserID(userID string) (*models.Workspace, error) {
 	var workspace models.Workspace
-	err := r.db.Where("user_id = ?", userID).
+	//case-sensitive match (annoying bug)
+	err := r.db.Where(`"userId" = ?`, userID).
 		Order("created_at ASC").
 		First(&workspace).Error
 	

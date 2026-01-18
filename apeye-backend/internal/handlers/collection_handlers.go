@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/middleware"
@@ -38,22 +39,35 @@ func (h *CollectionHandler) ListCollections(c *gin.Context) {
 // CreateCollection creates a new collection
 func (h *CollectionHandler) CreateCollection(c *gin.Context) {
 	userID, exists := middleware.GetUserID(c)
+	log.Println("CreateCollection userID:", userID)
+
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
 
 	var input services.CreateCollectionInput
+
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	
+	log.Printf("CreateCollection input: %+v\n", input)
+	
+	if input.WorkspaceID == "" {
+		c.JSON(400, gin.H{"error": "workspaceId is required"})
+		return
+	}
+	
 
 	collection, err := h.collectionService.CreateCollection(userID, input)
 	if err != nil {
+		log.Println("\n\nCreateCollection service error:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	
 
 	c.JSON(http.StatusCreated, collection)
 }
