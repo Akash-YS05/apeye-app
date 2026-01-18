@@ -26,6 +26,7 @@ export default function ResponseViewer() {
   const [activeTab, setActiveTab] = useState('body');
   const [prettyPrint, setPrettyPrint] = useState(true);
   const [bodyCopied, setBodyCopied] = useState(false);
+  const [showLineNumbers, setShowLineNumbers] = useState(true);
 
   if (isLoading) {
     return (
@@ -129,7 +130,15 @@ export default function ResponseViewer() {
               {prettyPrint ? 'Raw' : 'Pretty'}
             </Button>
           )}
-          
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowLineNumbers(!showLineNumbers)}
+          >
+            {showLineNumbers ? 'Hide' : 'Show'} Lines
+          </Button>
+
           <Button
             variant="outline"
             size="sm"
@@ -173,7 +182,7 @@ export default function ResponseViewer() {
                 <CodeBlock
                   code={getResponseBody()}
                   language={getLanguage()}
-                  showLineNumbers={prettyPrint}
+                  showLineNumbers={showLineNumbers && prettyPrint}
                 />
               ) : (
                 <Card className="p-8 text-center">
@@ -187,7 +196,7 @@ export default function ResponseViewer() {
                 <div className="space-y-3">
                   {Object.entries(response.headers).map(([key, value]) => (
                     <div key={key} className="flex gap-4 text-sm border-b pb-2 last:border-0">
-                      <span className="font-medium text-gray-700 min-w-50">{key}:</span>
+                      <span className="font-medium text-gray-700 min-w-[200px]">{key}:</span>
                       <span className="text-gray-600 break-all flex-1">{value}</span>
                     </div>
                   ))}
