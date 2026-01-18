@@ -82,7 +82,7 @@ export const useCollectionsStore = create<CollectionsState>((set, get) => ({
           if (col.id === collectionId) {
             return {
               ...col,
-              requests: [...(col.requests || []), savedRequest],
+              requests: [...(col.requests || []), savedRequest as SavedRequest],
             };
           }
           return col;
