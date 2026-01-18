@@ -72,21 +72,33 @@ func (s *CollectionService) GetUserCollections(userID string) ([]models.Collecti
 
 // CreateCollection creates a new collection
 func (s *CollectionService) CreateCollection(userID string, input CreateCollectionInput) (*models.Collection, error) {
-	workspaceID, err := uuid.Parse(input.WorkspaceID)
-	if err != nil {
-		return nil, errors.New("invalid workspace ID")
-	}
+	var workspaceID uuid.UUID
+	var err error
 
-	// Verify workspace belongs to user
-	workspace, err := s.workspaceRepo.FindByID(workspaceID)
-	if err != nil {
-		return nil, err
-	}
-	if workspace == nil {
-		return nil, errors.New("workspace not found")
-	}
-	if workspace.UserID != userID {
-		return nil, ErrUnauthorized
+	if input.WorkspaceID == "" || input.WorkspaceID == "default-workspace-id" || input.WorkspaceID == "default" {
+		workspace, err := s.workspaceRepo.FindDefaultByUserID(userID)
+		if err != nil {
+			return nil, err
+		}
+		workspaceID = workspace.ID
+	} else {
+		// Parse provided workspace ID
+		workspaceID, err = uuid.Parse(input.WorkspaceID)
+		if err != nil {
+			return nil, errors.New("invalid workspace ID")
+		}
+
+		// Verify workspace belongs to user
+		workspace, err := s.workspaceRepo.FindByID(workspaceID)
+		if err != nil {
+			return nil, err
+		}
+		if workspace == nil {
+			return nil, errors.New("workspace not found")
+		}
+		if workspace.UserID != userID {
+			return nil, ErrUnauthorized
+		}
 	}
 
 	collection := &models.Collection{

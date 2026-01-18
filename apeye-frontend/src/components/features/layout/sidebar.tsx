@@ -16,8 +16,7 @@ export default function Sidebar() {
     fetchCollections();
   }, [fetchCollections]);
 
-  // For now, use a hardcoded workspace ID (we'll get this from user context later)
-  const defaultWorkspaceId = 'default-workspace-id';
+  const defaultWorkspaceId = 'default';
 
   return (
     <div className="h-full flex flex-col">

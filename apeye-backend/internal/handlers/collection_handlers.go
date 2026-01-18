@@ -54,21 +54,15 @@ func (h *CollectionHandler) CreateCollection(c *gin.Context) {
 	}
 	
 	log.Printf("CreateCollection input: %+v\n", input)
-	
-	if input.WorkspaceID == "" {
-		c.JSON(400, gin.H{"error": "workspaceId is required"})
-		return
-	}
-	
 
 	collection, err := h.collectionService.CreateCollection(userID, input)
 	if err != nil {
-		log.Println("\n\nCreateCollection service error:", err)
+		log.Println("CreateCollection service error:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	
 
+	log.Printf("CreateCollection success: %+v\n", collection)
 	c.JSON(http.StatusCreated, collection)
 }
 

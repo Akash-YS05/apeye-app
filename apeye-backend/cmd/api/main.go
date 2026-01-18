@@ -44,6 +44,7 @@ func main() {
 	// Initialize handlers
 	requestHandler := handlers.NewRequestHandler(requestService)
 	collectionHandler := handlers.NewCollectionHandler(collectionService)
+	// collectionHandler := handlers.NewCollectionHandler(collectionService)
 
 	// Initialize router
 	router := gin.Default()

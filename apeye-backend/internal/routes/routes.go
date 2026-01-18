@@ -12,6 +12,7 @@ func SetupRoutes(
 	cfg *config.Config,
 	requestHandler *handlers.RequestHandler,
 	collectionHandler *handlers.CollectionHandler,
+	// workspaceHandler *handlers.WorkspaceHandler,
 ) {
 	// API group
 	api := router.Group("/api")
