@@ -5,7 +5,7 @@ import { ChevronRight, ChevronDown, Folder, Trash2, FileText } from 'lucide-reac
 import { Button } from '@/components/ui/button';
 import { useCollectionsStore } from '@/stores/collectionsStore';
 import { useRequestStore } from '@/stores/requestStore';
-import type { Collection } from '@/types';
+import type { Collection, SavedRequest } from '@/types';
 
 interface CollectionItemProps {
   collection: Collection;
@@ -14,12 +14,15 @@ interface CollectionItemProps {
 export default function CollectionItem({ collection }: CollectionItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const { deleteCollection, deleteRequest } = useCollectionsStore();
-  const { setMethod, setUrl, config } = useRequestStore();
+  const { setMethod, setUrl } = useRequestStore();
 
-  const handleLoadRequest = (request: any) => {
+  const handleLoadRequest = (request: SavedRequest) => {
+    // Load basic request data
     setMethod(request.method);
     setUrl(request.url);
-    // TODO: Load other request data (headers, body, auth, params)
+    
+    // TODO: Load headers, params, auth, body
+    // This will be implemented when we add full request loading
   };
 
   const handleDeleteCollection = (e: React.MouseEvent) => {
@@ -29,7 +32,11 @@ export default function CollectionItem({ collection }: CollectionItemProps) {
     }
   };
 
-  const handleDeleteRequest = (e: React.MouseEvent, requestId: string, requestName: string) => {
+  const handleDeleteRequest = (
+    e: React.MouseEvent,
+    requestId: string,
+    requestName: string
+  ) => {
     e.stopPropagation();
     if (confirm(`Delete request "${requestName}"?`)) {
       deleteRequest(requestId);
@@ -65,7 +72,6 @@ export default function CollectionItem({ collection }: CollectionItemProps) {
         </Button>
       </div>
 
-      {/* Requests List */}
       {isExpanded && collection.requests && collection.requests.length > 0 && (
         <div className="ml-6 space-y-1">
           {collection.requests.map((request) => (
@@ -76,7 +82,7 @@ export default function CollectionItem({ collection }: CollectionItemProps) {
             >
               <FileText className="h-3 w-3 text-gray-500" />
               <span className="flex-1 text-sm truncate">{request.name}</span>
-              <span className="text-xs font-mono text-gray-500">
+              <span className="text-xs font-mono text-gray-500 uppercase">
                 {request.method}
               </span>
               <Button
@@ -92,7 +98,6 @@ export default function CollectionItem({ collection }: CollectionItemProps) {
         </div>
       )}
 
-      {/* Empty State */}
       {isExpanded && (!collection.requests || collection.requests.length === 0) && (
         <div className="ml-6 px-2 py-2 text-xs text-gray-500">
           No requests yet
