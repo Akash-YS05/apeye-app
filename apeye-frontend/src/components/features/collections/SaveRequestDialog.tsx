@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useCollectionsStore } from '@/stores/collectionStore';
+import { useCollectionsStore } from '@/stores/collectionsStore';
 import { useRequestStore } from '@/stores/requestStore';
 
 interface SaveRequestDialogProps {

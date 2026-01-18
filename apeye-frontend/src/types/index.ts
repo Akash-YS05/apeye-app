@@ -53,21 +53,26 @@ export interface User {
 
 export interface Collection {
   id: string;
-  workspaceId: string;
+  workspace_id: string;
   name: string;
   description?: string;
-  requests: SavedRequest[];
-  createdAt: string;
-  updatedAt: string;
+  requests?: SavedRequest[];
+  created_at: string;
+  updated_at: string;
 }
 
 export interface SavedRequest {
   id: string;
-  collectionId: string;
+  collection_id: string;
   name: string;
-  config: RequestConfig;
-  createdAt: string;
-  updatedAt: string;
+  method: HttpMethod;
+  url: string;
+  headers: Record<string, any>;
+  params: Record<string, any>;
+  auth: Record<string, any>;
+  body: Record<string, any>;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Environment {

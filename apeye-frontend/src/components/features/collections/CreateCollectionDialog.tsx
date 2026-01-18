@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useCollectionsStore } from '@/stores/collectionStore';
+import { useCollectionsStore } from '@/stores/collectionsStore';
 
 interface CreateCollectionDialogProps {
   open: boolean;
