@@ -42,7 +42,7 @@ export default function ResponseViewer() {
       {/* Response Status Bar */}
       <div className="p-4 border-b flex items-center gap-4">
         <Badge className={`${getStatusColor(response.status)} text-white`}>
-          {response.status} {response.statusText}
+          {response.statusText}
         </Badge>
         <span className="text-sm text-gray-600">
           Time: <span className="font-medium">{response.time}ms</span>
