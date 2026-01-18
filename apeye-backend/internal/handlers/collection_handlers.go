@@ -53,7 +53,7 @@ func (h *CollectionHandler) CreateCollection(c *gin.Context) {
 		return
 	}
 	
-	log.Printf("CreateCollection input: %+v\n", input)
+	// log.Printf("CreateCollection input: %+v\n", input)
 
 	collection, err := h.collectionService.CreateCollection(userID, input)
 	if err != nil {

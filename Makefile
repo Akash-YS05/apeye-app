@@ -1,4 +1,4 @@
-.PHONY: help dev-up dev-down backend frontend install-frontend install-backend test clean
+.PHONY: help dev-up dev-down backend backend-watch frontend install-frontend install-backend db-connect clean
 
 help: ## Show this help message
 	@echo "Available commands:"
@@ -6,38 +6,35 @@ help: ## Show this help message
 
 dev-up: ## Start PostgreSQL and Redis
 	docker-compose up -d
-	@echo "Database services started"
+	@echo "✅ Database services started"
 
 dev-down: ## Stop PostgreSQL and Redis
 	docker-compose down
-	@echo "Database services stopped"
+	@echo "✅ Database services stopped"
 
 install-frontend: ## Install frontend dependencies
 	cd apeye-frontend && npm install
-	@echo "Frontend dependencies installed"
+	@echo "✅ Frontend dependencies installed"
 
 install-backend: ## Install backend dependencies
 	cd apeye-backend && go mod download
-	@echo "Backend dependencies installed"
+	@echo "✅ Backend dependencies installed"
 
-backend: ## Run backend server
+backend: ## Run backend server (manual restart)
 	cd apeye-backend && go run cmd/api/main.go
+
+backend-watch: ## Run backend with auto-reload (recommended)
+	cd apeye-backend && air
 
 frontend: ## Run frontend dev server
 	cd apeye-frontend && npm run dev
 
-db-reset: ## Reset database (drop and recreate)
-	docker-compose down -v
-	docker-compose up -d
-	@echo "⏳ Waiting for database to be ready..."
-	@sleep 3
-	@echo "Database reset complete. Run 'make backend' to recreate tables."
-
 db-connect: ## Connect to PostgreSQL
-	docker exec -it apeye-postgres psql -U postgres -d apeye
+	psql "$(DATABASE_URL)"
 
 clean: ## Clean up everything
 	docker-compose down -v
 	rm -rf apeye-frontend/node_modules
 	rm -rf apeye-frontend/.next
-	@echo "Cleaned up"
+	rm -rf apeye-backend/tmp
+	@echo "✅ Cleaned up"

@@ -75,7 +75,10 @@ func (s *CollectionService) CreateCollection(userID string, input CreateCollecti
 	var workspaceID uuid.UUID
 	var err error
 
-	if input.WorkspaceID == "" || input.WorkspaceID == "default-workspace-id" || input.WorkspaceID == "default" {
+	if input.WorkspaceID == "" || 
+	   input.WorkspaceID == "default" || 
+	   input.WorkspaceID == "default-workspace-id" {
+		// Get or create the user's default workspace
 		workspace, err := s.workspaceRepo.FindDefaultByUserID(userID)
 		if err != nil {
 			return nil, err
@@ -85,10 +88,10 @@ func (s *CollectionService) CreateCollection(userID string, input CreateCollecti
 		// Parse provided workspace ID
 		workspaceID, err = uuid.Parse(input.WorkspaceID)
 		if err != nil {
-			return nil, errors.New("invalid workspace ID")
+			return nil, errors.New("invalid workspace ID format")
 		}
 
-		// Verify workspace belongs to user
+		// Verify workspace exists and belongs to user
 		workspace, err := s.workspaceRepo.FindByID(workspaceID)
 		if err != nil {
 			return nil, err
