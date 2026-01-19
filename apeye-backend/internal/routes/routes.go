@@ -12,7 +12,7 @@ func SetupRoutes(
 	cfg *config.Config,
 	requestHandler *handlers.RequestHandler,
 	collectionHandler *handlers.CollectionHandler,
-	// workspaceHandler *handlers.WorkspaceHandler,
+	historyHandler *handlers.HistoryHandler, 
 ) {
 	// API group
 	api := router.Group("/api")
@@ -55,6 +55,11 @@ func SetupRoutes(
 			// Saved Requests
 			protected.POST("/requests", collectionHandler.SaveRequest)
 			protected.DELETE("/requests/:id", collectionHandler.DeleteRequest)
+
+			// History
+			protected.GET("/history", historyHandler.ListHistory)
+			protected.DELETE("/history/:id", historyHandler.DeleteHistory)
+			protected.DELETE("/history", historyHandler.ClearAllHistory)
 		}
 	}
 }
