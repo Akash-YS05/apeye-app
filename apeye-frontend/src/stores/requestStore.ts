@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { RequestConfig, ApiResponse, KeyValue } from '@/types';
+import { RequestConfig, ApiResponse, KeyValue, SavedRequest } from '@/types';
 import { nanoid } from 'nanoid';
 import { requestsApi } from '@/lib/api/requests';
 import toast from 'react-hot-toast';
@@ -23,7 +23,7 @@ interface RequestState {
   setAuthType: (type: RequestConfig['auth']['type']) => void;
   setAuthToken: (token: string) => void;
   setAuthBasic: (username: string, password: string) => void;
-  setAuthApiKey: (key: string, value: string) => void;
+  setAuthApiKey: (apiKey: string, apiValue: string) => void;
   
   setBodyType: (type: RequestConfig['body']['type']) => void;
   setBodyContent: (content: string) => void;
@@ -36,6 +36,7 @@ interface RequestState {
   setResponse: (response: ApiResponse | null) => void;
   setLoading: (loading: boolean) => void;
   resetRequest: () => void;
+  loadSavedRequest: (request: SavedRequest) => void; // ADD THIS LINE
 }
 
 const initialConfig: RequestConfig = {
@@ -220,4 +221,52 @@ export const useRequestStore = create<RequestState>((set, get) => ({
   setResponse: (response) => set({ response }),
   setLoading: (loading) => set({ isLoading: loading }),
   resetRequest: () => set({ config: initialConfig, response: null }),
+  loadSavedRequest: (request: SavedRequest) => {
+    // Convert saved request data back to KeyValue arrays
+    const headersArray: KeyValue[] = request.headers 
+      ? Object.entries(request.headers).map(([key, value]) => ({
+          id: nanoid(),
+          key,
+          value: String(value),
+          enabled: true,
+        }))
+      : [];
+  
+    const paramsArray: KeyValue[] = request.params
+      ? Object.entries(request.params).map(([key, value]) => ({
+          id: nanoid(),
+          key,
+          value: String(value),
+          enabled: true,
+        }))
+      : [];
+  
+    const formDataArray: KeyValue[] = request.body?.formData
+      ? Object.entries(request.body.formData).map(([key, value]) => ({
+          id: nanoid(),
+          key,
+          value: String(value),
+          enabled: true,
+        }))
+      : [];
+  
+    set({
+      config: {
+        method: request.method,
+        url: request.url,
+        params: paramsArray,
+        headers: headersArray.length > 0 ? headersArray : [
+          { id: nanoid(), key: 'Content-Type', value: 'application/json', enabled: true },
+        ],
+        //@ts-ignore
+        auth: request.auth || { type: 'none' },
+        body: {
+          type: request.body?.type || 'none',
+          content: request.body?.content || '',
+          formData: formDataArray,
+        },
+      },
+      response: null, // Clear previous response
+    });
+  },
 }));
