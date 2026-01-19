@@ -1,7 +1,10 @@
 package repository
 
 import (
+	"errors"
+
 	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/models"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -26,6 +29,19 @@ func (r *HistoryRepository) FindByUserID(userID string, limit int) ([]models.His
 		Limit(limit).
 		Find(&history).Error
 	return history, err
+}
+
+// FindByID retrieves a single history item
+func (r *HistoryRepository) FindByID(id uuid.UUID) (*models.History, error) {
+	var history models.History
+	err := r.db.First(&history, "id = ?", id).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &history, nil
 }
 
 // Delete removes a history record
