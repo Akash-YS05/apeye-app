@@ -12,9 +12,15 @@ interface CodeBlockProps {
   code: string;
   language: string;
   showLineNumbers?: boolean;
+  wrapLines?: boolean;
 }
 
-export default function CodeBlock({ code, language, showLineNumbers = true }: CodeBlockProps) {
+export default function CodeBlock({ 
+  code, 
+  language, 
+  showLineNumbers = true,
+  wrapLines = true 
+}: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -33,7 +39,7 @@ export default function CodeBlock({ code, language, showLineNumbers = true }: Co
       <Button
         size="sm"
         variant="ghost"
-        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-gray-800 hover:bg-gray-700 text-white"
         onClick={handleCopy}
       >
         {copied ? (
@@ -49,19 +55,22 @@ export default function CodeBlock({ code, language, showLineNumbers = true }: Co
         )}
       </Button>
       
-      <SyntaxHighlighter
-        language={language}
-        style={vscDarkPlus}
-        showLineNumbers={showLineNumbers}
-        customStyle={{
-          margin: 0,
-          borderRadius: '0.5rem',
-          fontSize: '0.875rem',
-        }}
-        wrapLongLines
-      >
-        {code}
-      </SyntaxHighlighter>
+      <div className="overflow-x-auto">
+        <SyntaxHighlighter
+          language={language}
+          style={vscDarkPlus}
+          showLineNumbers={showLineNumbers}
+          customStyle={{
+            margin: 0,
+            borderRadius: '0.5rem',
+            fontSize: '0.875rem',
+            minWidth: '100%',
+          }}
+          wrapLongLines={wrapLines}
+        >
+          {code}
+        </SyntaxHighlighter>
+      </div>
     </div>
   );
 }

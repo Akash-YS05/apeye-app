@@ -10,27 +10,27 @@ export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col overflow-hidden">
       {/* Header */}
       <Header onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
         {sidebarOpen && (
-          <div className="w-64 border-r bg-gray-50 dark:bg-gray-900">
+          <div className="w-64 border-r bg-gray-50 dark:bg-gray-900 overflow-auto">
             <Sidebar />
           </div>
         )}
 
-        {/* Main Content */}
-        <div className="flex-1 flex flex-col">
-          {/* Request Builder - Top Half */}
-          <div className="flex-1 overflow-auto border-b">
+        {/* Main Content - Split 50/50 */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Request Builder - Top 50% */}
+          <div className="h-1/2 border-b overflow-hidden">
             <RequestBuilder />
           </div>
 
-          {/* Response Viewer - Bottom Half */}
-          <div className="h-1/2 overflow-auto">
+          {/* Response Viewer - Bottom 50% */}
+          <div className="h-1/2 overflow-hidden">
             <ResponseViewer />
           </div>
         </div>
