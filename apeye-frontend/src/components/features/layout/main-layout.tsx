@@ -22,15 +22,15 @@ export default function MainLayout() {
           </div>
         )}
 
-        {/* Main Content - Split 50/50 */}
+        {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Request Builder - Top 50% */}
-          <div className="h-1/2 border-b overflow-hidden">
+          {/* Request Builder - 30% of space, compact */}
+          <div className="h-[30vh] border-b overflow-auto flex-shrink-0">
             <RequestBuilder />
           </div>
 
-          {/* Response Viewer - Bottom 50% */}
-          <div className="h-1/2 overflow-hidden">
+          {/* Response Viewer - 70% of space */}
+          <div className="flex-1 overflow-hidden">
             <ResponseViewer />
           </div>
         </div>

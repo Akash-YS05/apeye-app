@@ -50,9 +50,9 @@ export default function RequestBuilder() {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col overflow-hidden">
       {/* Request Line */}
-      <div className="p-4 border-b bg-white dark:bg-gray-800 sticky top-0 z-10">
+      <div className="p-4 border-b bg-white dark:bg-gray-800 flex-shrink-0">
         <div className="flex gap-2">
           <Select value={config.method} onValueChange={setMethod}>
             <SelectTrigger className="w-32">

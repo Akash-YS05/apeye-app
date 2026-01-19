@@ -105,12 +105,12 @@ export default function ResponseViewer() {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col overflow-hidden">
       {/* Response Status Bar */}
-      <div className="p-4 border-b flex items-center justify-between">
+      <div className="p-4 py-2 border-b flex items-center justify-between flex-shrink-0 bg-white dark:bg-gray-800">
         <div className="flex items-center gap-4">
-          <Badge className={`${getStatusColor(response.status)} text-white`}>
-            {response.status} {response.statusText}
+          <Badge className={`${getStatusColor(response.status)} text-white px-3 py-1`}>
+            {response.statusText}
           </Badge>
           <span className="text-sm text-gray-600">
             Time: <span className="font-medium">{formatTime(response.time)}</span>
@@ -119,7 +119,7 @@ export default function ResponseViewer() {
             Size: <span className="font-medium">{formatBytes(response.size)}</span>
           </span>
         </div>
-
+  
         <div className="flex items-center gap-2">
           {(isJsonResponse || isXmlResponse || isHtmlResponse) && (
             <Button
@@ -130,15 +130,7 @@ export default function ResponseViewer() {
               {prettyPrint ? 'Raw' : 'Pretty'}
             </Button>
           )}
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowLineNumbers(!showLineNumbers)}
-          >
-            {showLineNumbers ? 'Hide' : 'Show'} Lines
-          </Button>
-
+          
           <Button
             variant="outline"
             size="sm"
@@ -156,7 +148,7 @@ export default function ResponseViewer() {
               </>
             )}
           </Button>
-
+  
           <Button
             variant="outline"
             size="sm"
@@ -167,43 +159,42 @@ export default function ResponseViewer() {
           </Button>
         </div>
       </div>
-
+  
       {/* Response Tabs */}
-      <div className="flex-1 overflow-auto">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
-          <TabsList className="w-full justify-start rounded-none border-b px-4">
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
+          <TabsList className="w-fit justify-start border-b px-4 flex-shrink-0 rounded">
             <TabsTrigger value="body">Body</TabsTrigger>
             <TabsTrigger value="headers">Headers ({Object.keys(response.headers).length})</TabsTrigger>
           </TabsList>
-
-          <div className="p-4">
-            <TabsContent value="body" className="mt-0">
-              {response.data ? (
-                <CodeBlock
-                  code={getResponseBody()}
-                  language={getLanguage()}
-                  showLineNumbers={showLineNumbers && prettyPrint}
-                />
-              ) : (
-                <Card className="p-8 text-center">
-                  <p className="text-gray-500">No response body</p>
-                </Card>
-              )}
-            </TabsContent>
-
-            <TabsContent value="headers" className="mt-0">
-              <Card className="p-4">
-                <div className="space-y-3">
-                  {Object.entries(response.headers).map(([key, value]) => (
-                    <div key={key} className="flex gap-4 text-sm border-b pb-2 last:border-0">
-                      <span className="font-medium text-gray-700 min-w-[200px]">{key}:</span>
-                      <span className="text-gray-600 break-all flex-1">{value}</span>
-                    </div>
-                  ))}
-                </div>
+  
+          <TabsContent value="body" className="flex-1 p-4 overflow-auto m-0">
+            {response.data ? (
+              <CodeBlock
+                code={getResponseBody()}
+                language={getLanguage()}
+                showLineNumbers={prettyPrint}
+                wrapLines={prettyPrint}
+              />
+            ) : (
+              <Card className="p-8 text-center">
+                <p className="text-gray-500">No response body</p>
               </Card>
-            </TabsContent>
-          </div>
+            )}
+          </TabsContent>
+  
+          <TabsContent value="headers" className="flex-1 p-4 overflow-auto m-0">
+            <Card className="p-4">
+              <div className="space-y-3">
+                {Object.entries(response.headers).map(([key, value]) => (
+                  <div key={key} className="flex gap-4 text-sm border-b pb-2 last:border-0">
+                    <span className="font-medium text-gray-700 min-w-[200px]">{key}:</span>
+                    <span className="text-gray-600 break-all flex-1">{value}</span>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </TabsContent>
         </Tabs>
       </div>
     </div>
