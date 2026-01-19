@@ -79,10 +79,13 @@ export default function CollectionItem({ collection }: CollectionItemProps) {
               onClick={() => handleLoadRequest(request)}
             >
               <FileText className="h-3 w-3 text-gray-500" />
-              <span className="flex-1 text-sm truncate">{request.name}</span>
-              <span className="text-xs font-mono text-gray-500 uppercase">
-                {request.method}
-              </span>
+              <div className="flex items-baseline gap-6">
+                <span className="text-sm truncate">{request.name}</span>
+                <span className="text-xs font-mono text-gray-500 uppercase">
+                  {request.method}
+                </span>
+              </div>
+
               <Button
                 variant="ghost"
                 size="icon"
