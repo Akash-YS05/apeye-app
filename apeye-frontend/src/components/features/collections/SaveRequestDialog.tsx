@@ -27,6 +27,13 @@ interface SaveRequestDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
+const kvArrayToObject = (arr: any[] = []) =>
+  arr.reduce((acc, item) => {
+    if (item.key) acc[item.key] = item.value;
+    return acc;
+  }, {} as Record<string, any>);
+
+
 export default function SaveRequestDialog({ open, onOpenChange }: SaveRequestDialogProps) {
   const [name, setName] = useState('');
   const [selectedCollectionId, setSelectedCollectionId] = useState('');
@@ -39,14 +46,16 @@ export default function SaveRequestDialog({ open, onOpenChange }: SaveRequestDia
     e.preventDefault();
     
     if (!name.trim() || !selectedCollectionId) return;
+    const headersObject = kvArrayToObject(config.headers);
+    const paramsObject = kvArrayToObject(config.params);
     
     setIsSubmitting(true);
     try {
       await saveRequest(selectedCollectionId, name, {
         method: config.method,
         url: config.url,
-        headers: config.headers,
-        params: config.params,
+        headers: headersObject,
+        params: paramsObject,
         auth: config.auth,
         body: config.body,
       });

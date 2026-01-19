@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -139,9 +140,11 @@ func (h *CollectionHandler) SaveRequest(c *gin.Context) {
 
 	var input services.SaveRequestInput
 	if err := c.ShouldBindJSON(&input); err != nil {
+		fmt.Println("BIND ERROR:", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	
 
 	request, err := h.collectionService.SaveRequest(userID, input)
 	if err != nil {
