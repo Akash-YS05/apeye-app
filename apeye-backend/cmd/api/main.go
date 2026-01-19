@@ -44,7 +44,7 @@ func main() {
 	// Initialize handlers
 	requestHandler := handlers.NewRequestHandler(requestService)
 	collectionHandler := handlers.NewCollectionHandler(collectionService)
-	// collectionHandler := handlers.NewCollectionHandler(collectionService)
+	historyHandler := handlers.NewHistoryHandler(historyRepo) 
 
 	// Initialize router
 	router := gin.Default()
@@ -53,7 +53,7 @@ func main() {
 	router.Use(middleware.CORSMiddleware(cfg))
 
 	// Setup routes
-	routes.SetupRoutes(router, cfg, requestHandler, collectionHandler)
+	routes.SetupRoutes(router, cfg, requestHandler, collectionHandler, historyHandler)
 
 	// Start server
 	log.Printf("🚀 Server starting on port %s", cfg.Server.Port)
