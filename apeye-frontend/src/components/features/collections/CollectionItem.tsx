@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useCollectionsStore } from '@/stores/collectionsStore';
 import { useRequestStore } from '@/stores/requestStore';
 import type { Collection, SavedRequest } from '@/types';
+import toast from 'react-hot-toast';
 
 interface CollectionItemProps {
   collection: Collection;
@@ -14,15 +15,11 @@ interface CollectionItemProps {
 export default function CollectionItem({ collection }: CollectionItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const { deleteCollection, deleteRequest } = useCollectionsStore();
-  const { setMethod, setUrl } = useRequestStore();
+  const { loadSavedRequest } = useRequestStore();
 
   const handleLoadRequest = (request: SavedRequest) => {
-    // Load basic request data
-    setMethod(request.method);
-    setUrl(request.url);
-    
-    // TODO: Load headers, params, auth, body
-    // This will be implemented when we add full request loading
+    loadSavedRequest(request);
+    toast.success(`Loaded: ${request.name}`);
   };
 
   const handleDeleteCollection = (e: React.MouseEvent) => {
@@ -72,6 +69,7 @@ export default function CollectionItem({ collection }: CollectionItemProps) {
         </Button>
       </div>
 
+      {/* Requests List */}
       {isExpanded && collection.requests && collection.requests.length > 0 && (
         <div className="ml-6 space-y-1">
           {collection.requests.map((request) => (
@@ -98,6 +96,7 @@ export default function CollectionItem({ collection }: CollectionItemProps) {
         </div>
       )}
 
+      {/* Empty State */}
       {isExpanded && (!collection.requests || collection.requests.length === 0) && (
         <div className="ml-6 px-2 py-2 text-xs text-gray-500">
           No requests yet
