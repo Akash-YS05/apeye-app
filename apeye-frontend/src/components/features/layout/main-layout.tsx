@@ -21,7 +21,7 @@ export default function MainLayout() {
 
       <div className="flex flex-1 overflow-hidden">
         {sidebarOpen && (
-          <div className="w-64 border-r bg-gray-50 dark:bg-gray-900 overflow-auto">
+          <div className="w-80 border-r bg-gray-50 dark:bg-gray-900 overflow-auto">
             <Sidebar />
           </div>
         )}

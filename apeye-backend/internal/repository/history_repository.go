@@ -24,7 +24,7 @@ func (r *HistoryRepository) Create(history *models.History) error {
 // FindByUserID retrieves history for a user
 func (r *HistoryRepository) FindByUserID(userID string, limit int) ([]models.History, error) {
 	var history []models.History
-	err := r.db.Where("user_id = ?", userID).
+	err := r.db.Where(`"userId" = ?`, userID).
 		Order("created_at DESC").
 		Limit(limit).
 		Find(&history).Error
@@ -51,5 +51,5 @@ func (r *HistoryRepository) Delete(id string) error {
 
 // DeleteByUserID removes all history for a user
 func (r *HistoryRepository) DeleteByUserID(userID string) error {
-	return r.db.Where("user_id = ?", userID).Delete(&models.History{}).Error
+	return r.db.Where("userId = ?", userID).Delete(&models.History{}).Error
 }
