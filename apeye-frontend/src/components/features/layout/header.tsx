@@ -13,6 +13,7 @@ import {
 import { useSession, signOut } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -28,23 +29,26 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
     router.push('/login');
   };
 
-  // Get plan from session, fallback to 'free'
   const userPlan = (session?.user as any)?.plan || 'free';
 
   return (
-    <header className="h-14 border-b flex items-center justify-between px-4 bg-white dark:bg-gray-800">
+    <header className="h-14 border-b flex items-center justify-between px-4 bg-card">
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="icon" onClick={onToggleSidebar}>
           <Menu className="h-5 w-5" />
         </Button>
-        <h1 className="text-xl font-bold">APEye</h1>
+        <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+          APEye
+        </h1>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="text-sm">
-          <span className="text-gray-500">Plan: </span>
-          <span className="font-medium capitalize">{userPlan}</span>
+      <div className="flex items-center gap-2">
+        <div className="text-sm mr-2">
+          <span className="text-muted-foreground">Plan: </span>
+          <span className="font-medium capitalize text-primary">{userPlan}</span>
         </div>
+
+        <ThemeToggle />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -63,12 +67,8 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>
               <div className="flex flex-col">
-                <span className="text-sm font-medium">
-                  {session?.user?.name || 'User'}
-                </span>
-                <span className="text-xs text-gray-500">
-                  {session?.user?.email}
-                </span>
+                <span className="text-sm font-medium">{session?.user?.name || 'User'}</span>
+                <span className="text-xs text-muted-foreground">{session?.user?.email}</span>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />

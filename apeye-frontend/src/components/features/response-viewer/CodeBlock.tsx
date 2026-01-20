@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { vscDarkPlus, vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { copyToClipboard } from '@/lib/utils/response';
 import toast from 'react-hot-toast';
+import { useTheme } from 'next-themes';
 
 interface CodeBlockProps {
   code: string;
@@ -22,6 +23,7 @@ export default function CodeBlock({
   wrapLines = true 
 }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
+  const { theme } = useTheme();
 
   const handleCopy = async () => {
     try {
@@ -39,7 +41,7 @@ export default function CodeBlock({
       <Button
         size="sm"
         variant="ghost"
-        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-gray-800 hover:bg-gray-700 text-white"
+        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10"
         onClick={handleCopy}
       >
         {copied ? (
@@ -58,13 +60,14 @@ export default function CodeBlock({
       <div className="overflow-x-auto">
         <SyntaxHighlighter
           language={language}
-          style={vscDarkPlus}
+          style={theme === 'dark' ? vscDarkPlus : vs}
           showLineNumbers={showLineNumbers}
           customStyle={{
             margin: 0,
             borderRadius: '0.5rem',
             fontSize: '0.875rem',
             minWidth: '100%',
+            background: theme === 'dark' ? '#1e1e1e' : '#f5f5f5',
           }}
           wrapLongLines={wrapLines}
         >
