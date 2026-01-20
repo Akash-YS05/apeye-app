@@ -12,13 +12,13 @@ type History struct {
 	UserID       string     `gorm:"type:varchar(255);not null;index;column:userId" json:"userId"`
 	Method       HTTPMethod `gorm:"type:varchar(10);not null" json:"method"`
 	URL          string     `gorm:"type:text;not null" json:"url"`
-	RequestData  JSONB      `gorm:"type:jsonb;default:'{}'" json:"request_data"`
-	ResponseData JSONB      `gorm:"type:jsonb;default:'{}'" json:"response_data"`
-	StatusCode   int        `gorm:"type:int" json:"status_code"`
-	ResponseTime int        `gorm:"type:int" json:"response_time"`
-	CreatedAt    time.Time  `gorm:"autoCreateTime;index" json:"created_at"`
+	RequestData  JSONB      `gorm:"type:jsonb;default:'{}'" json:"requestData"`
+	ResponseData JSONB      `gorm:"type:jsonb;default:'{}'" json:"responseData"`
+	StatusCode   int        `gorm:"type:int" json:"statusCode"`
+	ResponseTime int        `gorm:"type:int" json:"responseTime"`
+	CreatedAt    time.Time  `gorm:"autoCreateTime;index" json:"createdAt"`
 
-	// Relationships - User is managed by Better-Auth, use "-" to skip auto-migration
+	// Relationships
 	User User `gorm:"foreignKey:UserID;references:ID;-" json:"user,omitempty"`
 }
 

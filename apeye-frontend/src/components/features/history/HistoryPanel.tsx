@@ -42,39 +42,59 @@ export default function HistoryPanel() {
   const filteredHistory = getFilteredHistory();
 
   // Group history by date
-  const groupByDate = (items: History[]) => {
-    const groups: Record<string, History[]> = {};
+const groupByDate = (items: History[]) => {
+  const groups: Record<string, History[]> = {};
+  
+  items.forEach((item) => {
+    // Parse the date string
+    let date: Date;
+    try {
+      date = new Date(item.createdAt);
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        console.error('Invalid date:', item.createdAt);
+        return; // Skip this item
+      }
+    } catch (error) {
+      console.error('Error parsing date:', item.createdAt, error);
+      return; // Skip this item
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     
-    items.forEach((item) => {
-      const date = new Date(item.createdAt);
-      const today = new Date();
-      const yesterday = new Date(today);
-      yesterday.setDate(yesterday.getDate() - 1);
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
 
-      let dateKey: string;
-      
-      if (date.toDateString() === today.toDateString()) {
-        dateKey = 'Today';
-      } else if (date.toDateString() === yesterday.toDateString()) {
-        dateKey = 'Yesterday';
-      } else if (date.getTime() > today.getTime() - 7 * 24 * 60 * 60 * 1000) {
-        dateKey = date.toLocaleDateString('en-US', { weekday: 'long' });
-      } else {
-        dateKey = date.toLocaleDateString('en-US', { 
-          month: 'short', 
-          day: 'numeric',
-          year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
-        });
-      }
+    const itemDate = new Date(date);
+    itemDate.setHours(0, 0, 0, 0);
 
-      if (!groups[dateKey]) {
-        groups[dateKey] = [];
-      }
-      groups[dateKey].push(item);
-    });
+    let dateKey: string;
+    
+    if (itemDate.getTime() === today.getTime()) {
+      dateKey = 'Today';
+    } else if (itemDate.getTime() === yesterday.getTime()) {
+      dateKey = 'Yesterday';
+    } else if (date.getTime() > today.getTime() - 7 * 24 * 60 * 60 * 1000) {
+      // Within last 7 days
+      dateKey = date.toLocaleDateString('en-US', { weekday: 'long' });
+    } else {
+      // Older dates
+      dateKey = date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric',
+        year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+      });
+    }
 
-    return groups;
-  };
+    if (!groups[dateKey]) {
+      groups[dateKey] = [];
+    }
+    groups[dateKey].push(item);
+  });
+
+  return groups;
+};
 
   const groupedHistory = groupByDate(filteredHistory);
   const dateKeys = Object.keys(groupedHistory);
