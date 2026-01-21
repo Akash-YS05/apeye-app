@@ -25,11 +25,11 @@ export default function LoginPage() {
       await signIn.email({
         email,
         password,
-        callbackURL: '/',
+        callbackURL: '/app',
       });
       
       toast.success('Login successful!');
-      router.push('/');
+      router.push('/app');
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Login failed. Please check your credentials.';
       toast.error(message);
@@ -42,7 +42,7 @@ export default function LoginPage() {
     try {
       await signIn.social({
         provider: 'google',
-        callbackURL: '/',
+        callbackURL: '/app',
       });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Google login failed';

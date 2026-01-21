@@ -39,11 +39,11 @@ export default function RegisterPage() {
         email,
         password,
         name,
-        callbackURL: '/',
+        callbackURL: '/app',
       });
       
       toast.success('Registration successful!');
-      router.push('/');
+      router.push('/app');
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Registration failed. Please try again.';
       toast.error(message);
@@ -56,7 +56,7 @@ export default function RegisterPage() {
     try {
       await signIn.social({
         provider: 'google',
-        callbackURL: '/',
+        callbackURL: '/app',
       });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Google registration failed';
