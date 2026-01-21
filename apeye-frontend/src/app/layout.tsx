@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 
 const inter = Inter({ subsets: ["latin"] });
-
+const dm_sans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+});
 export const metadata: Metadata = {
   title: "APEye - Modern API Testing Tool",
   description: "Test, debug, and manage your APIs with ease",
@@ -18,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.className} ${dm_sans.variable}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

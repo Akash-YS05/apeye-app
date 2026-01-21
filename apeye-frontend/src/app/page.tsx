@@ -122,7 +122,7 @@ export default function LandingPage() {
               <span className="text-muted-foreground">Fast. Modern. Powerful.</span>
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1] mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-dm-sans tracking-tighter text-foreground leading-[1.1] mb-6">
               Lightning Fast<br />
               <span className="text-muted-foreground">API Testing Platform</span>
             </h1>

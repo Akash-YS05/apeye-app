@@ -193,6 +193,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-dm-sans: var(--font-dm-sans);
   
   /* Core colors */
   --color-card: var(--card);
