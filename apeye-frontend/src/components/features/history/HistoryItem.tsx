@@ -13,10 +13,10 @@ interface HistoryItemProps {
 
 export default function HistoryItem({ item, onRerun, onDelete }: HistoryItemProps) {
   const getStatusColor = (status: number) => {
-    if (status >= 200 && status < 300) return 'bg-green-500';
-    if (status >= 300 && status < 400) return 'bg-blue-500';
-    if (status >= 400 && status < 500) return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (status >= 200 && status < 300) return 'bg-success';
+    if (status >= 300 && status < 400) return 'bg-info';
+    if (status >= 400 && status < 500) return 'bg-warning';
+    return 'bg-error';
   };
 
   const formatTime = (ms: number) => {
@@ -26,7 +26,7 @@ export default function HistoryItem({ item, onRerun, onDelete }: HistoryItemProp
   };
 
   return (
-    <div className="flex items-start gap-2 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 group">
+    <div className="flex items-start gap-2 p-2 rounded hover:bg-accent group">
       <div className="flex flex-col gap-1 pt-1">
         <Badge className={`${getStatusColor(item.statusCode)} text-white px-1.5 py-0.5 text-xs font-mono`}>
           {item.statusCode}
@@ -37,10 +37,10 @@ export default function HistoryItem({ item, onRerun, onDelete }: HistoryItemProp
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-medium truncate text-gray-900 dark:text-gray-100">
+        <p className="text-xs font-medium truncate text-foreground">
           {item.url}
         </p>
-        <p className="text-xs text-gray-500 mt-0.5">
+        <p className="text-xs text-muted-foreground mt-0.5">
           {formatTime(item.responseTime)}
         </p>
       </div>

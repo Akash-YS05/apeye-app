@@ -1,9 +1,8 @@
 'use client';
 
-import { ArrowRight, Zap, Code2, Shield, Sparkles } from 'lucide-react';
+import { ArrowRight, Zap, Code2, Shield, Sparkles, Terminal, Clock, Layers, Github } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useTheme } from 'next-themes';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useEffect, useState } from 'react';
 
@@ -19,82 +18,261 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-primary/5">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+      <header className="border-b bg-card/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
               <Zap className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-              APEye
-            </span>
+            <span className="text-xl font-bold text-foreground">APEye</span>
           </div>
           
-          <div className="flex items-center gap-4">
+          <nav className="hidden md:flex items-center gap-8">
+            <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Features
+            </a>
+            <a href="#demo" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Demo
+            </a>
+            <a href="https://github.com" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+              <Github className="h-4 w-4" />
+              GitHub
+            </a>
+          </nav>
+          
+          <div className="flex items-center gap-3">
             <ThemeToggle />
             <Link href="/login">
-              <Button variant="ghost">Login</Button>
+              <Button variant="ghost" size="sm">Login</Button>
             </Link>
             <Link href="/register">
-              <Button>Get Started</Button>
+              <Button size="sm">Get Started</Button>
             </Link>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 md:py-32">
-        <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border bg-card text-sm">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span>Modern API Testing Tool</span>
+      {/* Hero Section - Split Layout like Rolldown */}
+      <section className="border-b">
+        <div className="container mx-auto grid lg:grid-cols-2 min-h-[600px]">
+          {/* Left - Content */}
+          <div className="flex flex-col justify-center px-6 py-16 lg:py-24 lg:pr-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border bg-muted text-xs font-medium mb-8 w-fit">
+              <Sparkles className="h-3.5 w-3.5 text-warning" />
+              <span className="text-muted-foreground">Fast. Modern. Powerful.</span>
+            </div>
+            
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1] mb-6">
+              Lightning Fast<br />
+              <span className="text-muted-foreground">API Testing Platform</span>
+            </h1>
+            
+            <p className="text-lg text-muted-foreground max-w-lg mb-8">
+              A modern, beautiful API client built for developers who value speed 
+              and simplicity. Test, debug, and document your APIs with ease.
+            </p>
+            
+            <div className="flex items-center gap-4">
+              <Link href="/register">
+                <Button size="lg" className="gap-2 h-12 px-6">
+                  Get Started Free
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/login">
+                <Button size="lg" variant="outline" className="h-12 px-6">
+                  View Demo
+                </Button>
+              </Link>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="flex items-center gap-8 mt-12 pt-8 border-t">
+              <div>
+                <div className="text-2xl font-bold text-foreground">10ms</div>
+                <div className="text-sm text-muted-foreground">Avg Response</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-foreground">100%</div>
+                <div className="text-sm text-muted-foreground">Free & Open</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-foreground">Unlimited</div>
+                <div className="text-sm text-muted-foreground">Requests</div>
+              </div>
+            </div>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
-            Test APIs at the{' '}
-            <span className="bg-gradient-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent">
-              speed of thought
-            </span>
-          </h1>
-          
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            A lightning-fast, beautiful API testing platform built for modern developers.
-            Test, debug, and document your APIs with ease.
-          </p>
-          
-          <div className="flex items-center justify-center gap-4">
-            <Link href="/register">
-              <Button size="lg" className="gap-2">
-                Start Testing Free
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Link href="/login">
-              <Button size="lg" variant="outline">
-                View Demo
-              </Button>
-            </Link>
+          {/* Right - Terminal Preview */}
+          <div className="relative bg-card lg:border-l flex items-center justify-center p-8 lg:p-12">
+            <div className="w-full max-w-lg">
+              {/* Terminal Window */}
+              <div className="rounded-xl border bg-card shadow-2xl overflow-hidden">
+                {/* Terminal Header */}
+                <div className="flex items-center gap-2 px-4 py-3 border-b bg-muted/50">
+                  <div className="h-3 w-3 rounded-full bg-error" />
+                  <div className="h-3 w-3 rounded-full bg-warning" />
+                  <div className="h-3 w-3 rounded-full bg-success" />
+                  <span className="ml-2 text-xs text-muted-foreground font-mono">APEye - Request</span>
+                </div>
+                
+                {/* Terminal Content */}
+                <div className="p-4 font-mono text-sm space-y-3 bg-[var(--code-bg)]">
+                  <div className="flex items-center gap-2">
+                    <span className="text-success font-semibold">GET</span>
+                    <span className="text-muted-foreground">/api/users</span>
+                  </div>
+                  
+                  <div className="border-t border-dashed pt-3 mt-3">
+                    <div className="text-xs text-muted-foreground mb-2">Response 200 OK</div>
+                    <pre className="text-foreground text-xs leading-relaxed">
+{`{
+  "users": [
+    { "id": 1, "name": "John" },
+    { "id": 2, "name": "Jane" }
+  ],
+  "total": 2,
+  "status": "success"
+}`}
+                    </pre>
+                  </div>
+                  
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t">
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" /> 45ms
+                    </span>
+                    <span>Size: 128B</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating Badge */}
+              <div className="absolute -bottom-4 right-8 lg:right-12 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium shadow-lg">
+                Try it now - Free forever
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Screenshot Mockup */}
-        <div className="max-w-6xl mx-auto mt-20 animate-fade-in">
-          <div className="relative rounded-xl overflow-hidden border shadow-2xl">
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-purple-500/20 pointer-events-none" />
-            <div className="bg-card p-8">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="h-3 w-3 rounded-full bg-red-500" />
-                <div className="h-3 w-3 rounded-full bg-yellow-500" />
-                <div className="h-3 w-3 rounded-full bg-green-500" />
-              </div>
-              <div className="space-y-3">
-                <div className="h-10 bg-muted rounded-md animate-pulse" />
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="h-32 bg-muted rounded-md animate-pulse" />
-                  <div className="h-32 bg-muted rounded-md animate-pulse delay-75" />
-                  <div className="h-32 bg-muted rounded-md animate-pulse delay-150" />
+      {/* Features Headline */}
+      <section className="py-20 border-b">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Everything you need to test APIs
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Built with modern technologies for the best developer experience
+          </p>
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section id="features" className="border-b">
+        <div className="container mx-auto grid md:grid-cols-2 lg:grid-cols-4 divide-x divide-y">
+          {/* Feature 1 */}
+          <div className="p-8 lg:p-10">
+            <div className="h-12 w-12 rounded-lg bg-success/10 flex items-center justify-center mb-6">
+              <Zap className="h-6 w-6 text-success" />
+            </div>
+            <h3 className="text-lg font-semibold text-foreground mb-3">Lightning Fast</h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Send requests and get responses in milliseconds. Built for speed with optimized performance.
+            </p>
+          </div>
+
+          {/* Feature 2 */}
+          <div className="p-8 lg:p-10">
+            <div className="h-12 w-12 rounded-lg bg-info/10 flex items-center justify-center mb-6">
+              <Code2 className="h-6 w-6 text-info" />
+            </div>
+            <h3 className="text-lg font-semibold text-foreground mb-3">Developer First</h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Syntax highlighting, smart autocomplete, and keyboard shortcuts for power users.
+            </p>
+          </div>
+
+          {/* Feature 3 */}
+          <div className="p-8 lg:p-10">
+            <div className="h-12 w-12 rounded-lg bg-warning/10 flex items-center justify-center mb-6">
+              <Layers className="h-6 w-6 text-warning" />
+            </div>
+            <h3 className="text-lg font-semibold text-foreground mb-3">Collections</h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Organize your requests into collections. Save, share, and reuse your API workflows.
+            </p>
+          </div>
+
+          {/* Feature 4 */}
+          <div className="p-8 lg:p-10">
+            <div className="h-12 w-12 rounded-lg bg-error/10 flex items-center justify-center mb-6">
+              <Shield className="h-6 w-6 text-error" />
+            </div>
+            <h3 className="text-lg font-semibold text-foreground mb-3">Secure</h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Your data is encrypted. We never store your API keys or sensitive information.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Demo Section */}
+      <section id="demo" className="py-20 lg:py-32">
+        <div className="container mx-auto px-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                See it in action
+              </h2>
+              <p className="text-lg text-muted-foreground">
+                A clean, intuitive interface that gets out of your way
+              </p>
+            </div>
+
+            {/* App Screenshot/Preview */}
+            <div className="relative rounded-xl border bg-card shadow-2xl overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-info/5 pointer-events-none" />
+              
+              {/* Simulated App UI */}
+              <div className="p-6">
+                {/* Top Bar */}
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-md border bg-muted/50 flex-1">
+                    <span className="text-xs font-semibold text-success bg-success/10 px-2 py-0.5 rounded">GET</span>
+                    <span className="text-sm text-muted-foreground font-mono flex-1">https://api.example.com/users</span>
+                  </div>
+                  <Button size="sm">Send</Button>
+                </div>
+
+                {/* Content Area */}
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="md:col-span-1 p-4 rounded-lg bg-muted/30 border">
+                    <div className="text-xs font-medium text-muted-foreground mb-3">Collections</div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 p-2 rounded bg-accent text-sm">
+                        <Layers className="h-4 w-4 text-info" />
+                        <span>User API</span>
+                      </div>
+                      <div className="flex items-center gap-2 p-2 rounded text-sm text-muted-foreground">
+                        <Layers className="h-4 w-4" />
+                        <span>Auth API</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="md:col-span-2 p-4 rounded-lg bg-[var(--code-bg)] border font-mono text-xs">
+                    <div className="text-muted-foreground mb-2">Response</div>
+                    <pre className="text-foreground">
+{`{
+  "data": [...],
+  "pagination": {
+    "page": 1,
+    "total": 100
+  }
+}`}
+                    </pre>
+                  </div>
                 </div>
               </div>
             </div>
@@ -102,82 +280,53 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">
-              Everything you need to test APIs
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Powerful features in a beautiful, intuitive interface
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="group p-6 rounded-xl border bg-card hover:shadow-lg transition-all">
-              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Zap className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Lightning Fast</h3>
-              <p className="text-muted-foreground">
-                Built for speed. Send requests and get responses in milliseconds.
-              </p>
-            </div>
-
-            <div className="group p-6 rounded-xl border bg-card hover:shadow-lg transition-all">
-              <div className="h-12 w-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Code2 className="h-6 w-6 text-blue-500" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Developer First</h3>
-              <p className="text-muted-foreground">
-                Syntax highlighting, smart autocomplete, and powerful collections.
-              </p>
-            </div>
-
-            <div className="group p-6 rounded-xl border bg-card hover:shadow-lg transition-all">
-              <div className="h-12 w-12 rounded-lg bg-purple-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Shield className="h-6 w-6 text-purple-500" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Secure & Private</h3>
-              <p className="text-muted-foreground">
-                Your data is encrypted and secure. We never store your API keys.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="max-w-4xl mx-auto text-center space-y-8 p-12 rounded-2xl border bg-gradient-to-br from-primary/10 to-purple-500/10">
-          <h2 className="text-4xl md:text-5xl font-bold">
-            Ready to supercharge your API testing?
-          </h2>
-          <p className="text-xl text-muted-foreground">
-            Join thousands of developers testing APIs with APEye.
-          </p>
-          <Link href="/register">
-            <Button size="lg" className="gap-2">
-              Get Started for Free
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
+      <section className="border-t bg-muted/30">
+        <div className="container mx-auto px-6 py-20 lg:py-32">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Ready to supercharge your API testing?
+            </h2>
+            <p className="text-lg text-muted-foreground mb-8">
+              Join developers who test APIs faster and smarter with APEye.
+            </p>
+            <div className="flex items-center justify-center gap-4">
+              <Link href="/register">
+                <Button size="lg" className="gap-2 h-12 px-8">
+                  Get Started for Free
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="https://github.com" target="_blank">
+                <Button size="lg" variant="outline" className="h-12 px-8 gap-2">
+                  <Github className="h-4 w-4" />
+                  Star on GitHub
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t bg-card/50 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded-lg bg-primary flex items-center justify-center">
+      <footer className="border-t bg-card">
+        <div className="container mx-auto px-6 py-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
                 <Zap className="h-4 w-4 text-primary-foreground" />
               </div>
-              <span className="font-semibold">APEye</span>
+              <span className="font-semibold text-foreground">APEye</span>
             </div>
+            
+            <div className="flex items-center gap-6 text-sm text-muted-foreground">
+              <a href="#" className="hover:text-foreground transition-colors">Docs</a>
+              <a href="#" className="hover:text-foreground transition-colors">GitHub</a>
+              <a href="#" className="hover:text-foreground transition-colors">Twitter</a>
+            </div>
+            
             <p className="text-sm text-muted-foreground">
-              © 2026 APEye. Built with ❤️ for developers.
+              2026 APEye. Built for developers.
             </p>
           </div>
         </div>

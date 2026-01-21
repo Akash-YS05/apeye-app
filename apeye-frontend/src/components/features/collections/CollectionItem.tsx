@@ -44,7 +44,7 @@ export default function CollectionItem({ collection }: CollectionItemProps) {
     <div className="space-y-1">
       {/* Collection Header */}
       <div
-        className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer group"
+        className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-accent cursor-pointer group"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <button className="p-0 hover:bg-transparent">
@@ -54,9 +54,9 @@ export default function CollectionItem({ collection }: CollectionItemProps) {
             <ChevronRight className="h-4 w-4" />
           )}
         </button>
-        <Folder className="h-4 w-4 text-blue-500" />
+        <Folder className="h-4 w-4 text-info" />
         <span className="flex-1 text-sm truncate">{collection.name}</span>
-        <span className="text-xs text-gray-500">
+        <span className="text-xs text-muted-foreground">
           {collection.requests?.length || 0}
         </span>
         <Button
@@ -75,13 +75,13 @@ export default function CollectionItem({ collection }: CollectionItemProps) {
           {collection.requests.map((request) => (
             <div
               key={request.id}
-              className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer group"
+              className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-accent cursor-pointer group"
               onClick={() => handleLoadRequest(request)}
             >
-              <FileText className="h-3 w-3 text-gray-500" />
+              <FileText className="h-3 w-3 text-muted-foreground" />
               <div className="flex items-baseline gap-6">
                 <span className="text-sm truncate">{request.name}</span>
-                <span className="text-xs font-mono text-gray-500 uppercase">
+                <span className="text-xs font-mono text-muted-foreground uppercase">
                   {request.method}
                 </span>
               </div>
@@ -101,7 +101,7 @@ export default function CollectionItem({ collection }: CollectionItemProps) {
 
       {/* Empty State */}
       {isExpanded && (!collection.requests || collection.requests.length === 0) && (
-        <div className="ml-6 px-2 py-2 text-xs text-gray-500">
+        <div className="ml-6 px-2 py-2 text-xs text-muted-foreground">
           No requests yet
         </div>
       )}

@@ -30,10 +30,10 @@ export default function ResponseViewer() {
 
   if (isLoading) {
     return (
-      <div className="h-full flex items-center justify-center">
+      <div className="h-full flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-gray-600">Sending request...</p>
+          <p className="text-muted-foreground">Sending request...</p>
         </div>
       </div>
     );
@@ -41,8 +41,8 @@ export default function ResponseViewer() {
 
   if (!response) {
     return (
-      <div className="h-full flex items-center justify-center">
-        <div className="text-center text-gray-500">
+      <div className="h-full flex items-center justify-center bg-background">
+        <div className="text-center text-muted-foreground">
           <p className="text-lg font-medium">No response yet</p>
           <p className="text-sm mt-2">Send a request to see the response here</p>
         </div>
@@ -51,10 +51,10 @@ export default function ResponseViewer() {
   }
 
   const getStatusColor = (status: number) => {
-    if (status >= 200 && status < 300) return 'bg-green-500';
-    if (status >= 300 && status < 400) return 'bg-blue-500';
-    if (status >= 400 && status < 500) return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (status >= 200 && status < 300) return 'bg-success';
+    if (status >= 300 && status < 400) return 'bg-info';
+    if (status >= 400 && status < 500) return 'bg-warning';
+    return 'bg-error';
   };
 
   const contentType = getContentType(response.headers);
@@ -105,18 +105,18 @@ export default function ResponseViewer() {
   };
 
   return (
-    <div className="h-full flex flex-col overflow-hidden">
+    <div className="h-full flex flex-col overflow-hidden bg-background">
       {/* Response Status Bar */}
-      <div className="p-4 py-2 border-b flex items-center justify-between flex-shrink-0 bg-white dark:bg-gray-800">
+      <div className="p-4 py-2 border-b flex items-center justify-between flex-shrink-0 bg-card">
         <div className="flex items-center gap-4">
           <Badge className={`${getStatusColor(response.status)} text-white px-3 py-1`}>
             {response.statusText}
           </Badge>
-          <span className="text-sm text-gray-600">
-            Time: <span className="font-medium">{formatTime(response.time)}</span>
+          <span className="text-sm text-muted-foreground">
+            Time: <span className="font-medium text-foreground">{formatTime(response.time)}</span>
           </span>
-          <span className="text-sm text-gray-600">
-            Size: <span className="font-medium">{formatBytes(response.size)}</span>
+          <span className="text-sm text-muted-foreground">
+            Size: <span className="font-medium text-foreground">{formatBytes(response.size)}</span>
           </span>
         </div>
   
@@ -178,7 +178,7 @@ export default function ResponseViewer() {
               />
             ) : (
               <Card className="p-8 text-center">
-                <p className="text-gray-500">No response body</p>
+                <p className="text-muted-foreground">No response body</p>
               </Card>
             )}
           </TabsContent>
@@ -188,8 +188,8 @@ export default function ResponseViewer() {
               <div className="space-y-3">
                 {Object.entries(response.headers).map(([key, value]) => (
                   <div key={key} className="flex gap-4 text-sm border-b pb-2 last:border-0">
-                    <span className="font-medium text-gray-700 min-w-[200px]">{key}:</span>
-                    <span className="text-gray-600 break-all flex-1">{value}</span>
+                    <span className="font-medium text-foreground min-w-[200px]">{key}:</span>
+                    <span className="text-muted-foreground break-all flex-1">{value}</span>
                   </div>
                 ))}
               </div>

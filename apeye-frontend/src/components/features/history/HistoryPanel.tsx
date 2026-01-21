@@ -116,7 +116,7 @@ const groupByDate = (items: History[]) => {
       <div className="p-3 border-b space-y-2 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4 text-gray-500" />
+            <Clock className="h-4 w-4 text-muted-foreground" />
             <h3 className="font-medium text-sm">History</h3>
           </div>
           <div className="flex items-center gap-1">
@@ -196,7 +196,7 @@ const groupByDate = (items: History[]) => {
           </div>
         )}
 
-        <div className="text-xs text-gray-500">
+        <div className="text-xs text-muted-foreground">
           {filteredHistory.length} {filteredHistory.length === 1 ? 'request' : 'requests'}
         </div>
       </div>
@@ -208,8 +208,8 @@ const groupByDate = (items: History[]) => {
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
           </div>
         ) : dateKeys.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            <Clock className="h-10 w-10 mx-auto mb-2 text-gray-400" />
+          <div className="text-center py-8 text-muted-foreground">
+            <Clock className="h-10 w-10 mx-auto mb-2 text-muted-foreground" />
             <p className="text-xs">
               {history.length === 0
                 ? 'No history yet'

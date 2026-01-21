@@ -24,17 +24,17 @@ export default function HistoryDateGroup({
     <div className="space-y-1">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center gap-2 px-2 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded text-left"
+        className="w-full flex items-center gap-2 px-2 py-1.5 hover:bg-accent rounded text-left"
       >
         {isExpanded ? (
           <ChevronDown className="h-4 w-4 flex-shrink-0" />
         ) : (
           <ChevronRight className="h-4 w-4 flex-shrink-0" />
         )}
-        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <span className="text-sm font-medium text-foreground">
           {date}
         </span>
-        <span className="text-xs text-gray-500">({items.length})</span>
+        <span className="text-xs text-muted-foreground">({items.length})</span>
       </button>
 
       {isExpanded && (

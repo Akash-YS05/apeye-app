@@ -57,8 +57,8 @@ export default function Sidebar() {
               </div>
             ) : collections.length === 0 ? (
               <div className="text-center py-8 px-4">
-                <Folder className="h-12 w-12 mx-auto mb-2 text-gray-400" />
-                <p className="text-sm text-gray-500 mb-2">No collections yet</p>
+                <Folder className="h-12 w-12 mx-auto mb-2 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground mb-2">No collections yet</p>
                 <Button
                   size="sm"
                   variant="outline"

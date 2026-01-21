@@ -73,7 +73,7 @@ export default function BodyTab() {
       )}
 
       {config.body.type === 'none' && (
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-muted-foreground">
           This request does not have a body.
         </div>
       )}

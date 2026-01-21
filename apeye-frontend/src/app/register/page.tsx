@@ -65,7 +65,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Create Account</CardTitle>
@@ -107,7 +107,7 @@ export default function RegisterPage() {
               <Separator />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white dark:bg-gray-800 px-2 text-gray-500">
+              <span className="bg-card px-2 text-muted-foreground">
                 Or register with email
               </span>
             </div>
@@ -150,7 +150,7 @@ export default function RegisterPage() {
                 required
                 minLength={8}
               />
-              <p className="text-xs text-gray-500">Must be at least 8 characters</p>
+              <p className="text-xs text-muted-foreground">Must be at least 8 characters</p>
             </div>
 
             <div className="space-y-2">

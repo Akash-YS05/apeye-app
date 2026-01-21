@@ -57,7 +57,7 @@ export default function CodeBlock({
         )}
       </Button>
       
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-lg border border-code-border">
         <SyntaxHighlighter
           language={language}
           style={theme === 'dark' ? vscDarkPlus : vs}
@@ -67,7 +67,7 @@ export default function CodeBlock({
             borderRadius: '0.5rem',
             fontSize: '0.875rem',
             minWidth: '100%',
-            background: theme === 'dark' ? '#1e1e1e' : '#f5f5f5',
+            background: 'var(--code-bg)',
           }}
           wrapLongLines={wrapLines}
         >

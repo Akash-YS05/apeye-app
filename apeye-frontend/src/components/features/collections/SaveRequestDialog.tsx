@@ -108,7 +108,7 @@ export default function SaveRequestDialog({ open, onOpenChange }: SaveRequestDia
             </div>
             
             {collections.length === 0 && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 No collections yet. Create one first!
               </p>
             )}

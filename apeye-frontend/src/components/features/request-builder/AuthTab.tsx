@@ -82,7 +82,7 @@ export default function AuthTab() {
       )}
 
       {config.auth.type === 'none' && (
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-muted-foreground">
           This request does not use any authorization.
         </div>
       )}
