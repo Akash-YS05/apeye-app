@@ -13,6 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import Image from 'next/image';
+import { Globe } from '@/components/ui/globe';
 
 export default function LandingPage() {
   const [mounted, setMounted] = useState(false);
@@ -114,17 +116,17 @@ export default function LandingPage() {
 
       {/* Hero Section - Split Layout */}
       <section className="border-b">
-        <div className="container mx-auto grid lg:grid-cols-2 min-h-[600px]">
+        <div className="container mx-auto grid lg:grid-cols-[3fr_2fr] min-h-[600px]">
           {/* Left - Content */}
-          <div className="flex flex-col justify-center px-6 py-16 lg:py-24 lg:pr-12">
+          <div className="flex flex-col justify-center py-16">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border bg-muted text-xs font-medium mb-8 w-fit">
               <Sparkles className="h-3.5 w-3.5 text-warning" />
               <span className="text-muted-foreground">Fast. Modern. Powerful.</span>
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-dm-sans tracking-tighter text-foreground leading-[1.1] mb-6">
-              Lightning Fast<br />
-              <span className="text-muted-foreground">API Testing Platform</span>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-dm-sans tracking-tighter leading-[1.1] text-foreground mb-6">
+              The world is your endpoint<br />
+              <span className="text-muted-foreground">Test globally, debug locally.</span>
             </h1>
             
             <p className="text-lg text-muted-foreground max-w-lg mb-8">
@@ -158,7 +160,7 @@ export default function LandingPage() {
             </div>
 
             {/* Quick Stats */}
-            <div className="flex items-center gap-8 mt-12 pt-8 border-t">
+            <div className="flex items-center font-dm-sans gap-8 mt-12 pt-8 border-t">
               <div>
                 <div className="text-2xl font-bold text-foreground">10ms</div>
                 <div className="text-sm text-muted-foreground">Avg Response</div>
@@ -175,55 +177,16 @@ export default function LandingPage() {
           </div>
           
           {/* Right - Terminal Preview */}
-          <div className="relative bg-card lg:border-l flex items-center justify-center p-8 lg:p-12">
-            <div className="w-full max-w-lg">
-              {/* Terminal Window */}
-              <div className="rounded-xl border bg-card shadow-2xl overflow-hidden">
-                {/* Terminal Header */}
-                <div className="flex items-center gap-2 px-4 py-3 border-b bg-muted/50">
-                  <div className="h-3 w-3 rounded-full bg-error" />
-                  <div className="h-3 w-3 rounded-full bg-warning" />
-                  <div className="h-3 w-3 rounded-full bg-success" />
-                  <span className="ml-2 text-xs text-muted-foreground font-mono">APEye - Request</span>
-                </div>
-                
-                {/* Terminal Content */}
-                <div className="p-4 font-mono text-sm space-y-3 bg-[var(--code-bg)]">
-                  <div className="flex items-center gap-2">
-                    <span className="text-success font-semibold">GET</span>
-                    <span className="text-muted-foreground">/api/users</span>
-                  </div>
-                  
-                  <div className="border-t border-dashed pt-3 mt-3">
-                    <div className="text-xs text-muted-foreground mb-2">Response 200 OK</div>
-                    <pre className="text-foreground text-xs leading-relaxed">
-{`{
-  "users": [
-    { "id": 1, "name": "John" },
-    { "id": 2, "name": "Jane" }
-  ],
-  "total": 2,
-  "status": "success"
-}`}
-                    </pre>
-                  </div>
-                  
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t">
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" /> 45ms
-                    </span>
-                    <span>Size: 128B</span>
-                  </div>
-                </div>
-              </div>
+          <div className="relative">
+            <Globe/>
 
-              {/* Floating Badge */}
-              <div className="absolute -bottom-4 right-8 lg:right-12 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium shadow-lg">
-                Try it now - Free forever
-              </div>
+            {/* Floating Badge */}
+            <div className="absolute -bottom-4 right-8 lg:right-12 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium shadow-lg">
+              Try it now - Free forever
             </div>
           </div>
         </div>
+        {/* </div> */}
       </section>
 
       {/* Features Headline */}
