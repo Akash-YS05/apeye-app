@@ -20,6 +20,7 @@ import { NoiseBackground } from '@/components/ui/noise-background';
 import { GoogleGeminiEffect } from '@/components/ui/google-gemini-effect';
 import { GoogleGeminiEffectDemo } from '@/components/ui/req-res';
 import { GlowingEffectDemoSecond } from '@/components/ui/feature-grid';
+import { TextHoverEffectDemo } from '@/components/ui/footer';
 
 export default function LandingPage() {
   const [mounted, setMounted] = useState(false);
@@ -160,7 +161,7 @@ export default function LandingPage() {
                 <>
                   {/* Get Started */}
                   <NoiseBackground
-                    containerClassName="w-fit p-2 rounded-full"
+                    containerClassName="w-fit p-2 rounded-md"
                     gradientColors={[
                       "rgb(255, 100, 150)",
                       "rgb(100, 150, 255)",
@@ -391,25 +392,14 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t bg-card">
-        <div className="container mx-auto px-6 py-12">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <Zap className="h-4 w-4 text-primary-foreground" />
-              </div>
-              <span className="font-semibold text-foreground">APEye</span>
-            </div>
-            
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-foreground transition-colors">Docs</a>
-              <a href="#" className="hover:text-foreground transition-colors">GitHub</a>
-              <a href="#" className="hover:text-foreground transition-colors">Twitter</a>
-            </div>
-            
-            <p className="text-sm text-muted-foreground">
-              2026 APEye. Built for developers.
-            </p>
+      <footer className="border-t">
+        <div className="p-0 m-0 leading-none grid lg:grid-cols-2">
+          <div>
+            <TextHoverEffectDemo/>
+            {/* <p className='text-3xl mb'>Test globally, debug locally</p> */}
+          </div>
+          <div className='lg:border-l m-4'>
+
           </div>
         </div>
       </footer>
