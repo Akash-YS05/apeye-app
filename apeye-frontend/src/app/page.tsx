@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Image from 'next/image';
 import { Globe } from '@/components/ui/globe';
+import { AnimatedListDemo } from '@/components/ui/feature-list';
 
 export default function LandingPage() {
   const [mounted, setMounted] = useState(false);
@@ -124,7 +125,7 @@ export default function LandingPage() {
               <span className="text-muted-foreground">Fast. Modern. Powerful.</span>
             </div>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-dm-sans tracking-tighter leading-[1.1] text-foreground mb-6">
+            <h1 className="text-5xl md:text-6xl lg:text-6xl font-dm-sans tracking-tighter leading-[1.1] text-foreground mb-6">
               The world is your endpoint<br />
               <span className="text-muted-foreground">Test globally, debug locally.</span>
             </h1>
@@ -177,7 +178,7 @@ export default function LandingPage() {
           </div>
           
           {/* Right - Terminal Preview */}
-          <div className="relative">
+          <div className="relative border">
             <Globe/>
 
             {/* Floating Badge */}
@@ -191,11 +192,11 @@ export default function LandingPage() {
 
       {/* Features Headline */}
       <section className="py-20 border-b">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+        <div className="container mx-auto px-3">
+          <h2 className="text-4xl md:text-6xl font-dm-sans tracking-tighter text-foreground mb-4">
             Everything you need to test APIs
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl">
             Built with modern technologies for the best developer experience
           </p>
         </div>
@@ -203,50 +204,21 @@ export default function LandingPage() {
 
       {/* Features Grid */}
       <section id="features" className="border-b">
-        <div className="container mx-auto grid md:grid-cols-2 lg:grid-cols-4 divide-x divide-y">
-          {/* Feature 1 */}
-          <div className="p-8 lg:p-10">
-            <div className="h-12 w-12 rounded-lg bg-success/10 flex items-center justify-center mb-6">
-              <Zap className="h-6 w-6 text-success" />
-            </div>
-            <h3 className="text-lg font-semibold text-foreground mb-3">Lightning Fast</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              Send requests and get responses in milliseconds. Built for speed with optimized performance.
-            </p>
+        <div className="container mx-auto grid lg:grid-cols-2">
+          <div>
+          <AnimatedListDemo/>
+          </div>
+          <div className='relative border-l my-4'>
+          <p className="p-8 font-dm-sans text-xl text-muted-foreground leading-relaxed tracking-tight">
+            Built with developers in mind, the platform offers a <span className='text-accent-foreground'> clean, intuitive interface</span> that makes API testing effortless and fast. 
+            You can organize your requests into collections, making it <span className='text-accent-foreground'>easy to save, reuse, and share</span> complete workflows across projects 
+            and teams. <span className='text-accent-foreground'>Security is built in</span> by default - your requests, data, and credentials are handled safely, with no sensitive keys 
+            ever stored on our servers. And when it comes to speed, every request is <span className='text-accent-foreground'> optimized for performance</span>, delivering responses in 
+            milliseconds so you can <span className='text-accent-foreground'>test, debug, and iterate </span>without breaking your flow.
+          </p>
+
           </div>
 
-          {/* Feature 2 */}
-          <div className="p-8 lg:p-10">
-            <div className="h-12 w-12 rounded-lg bg-info/10 flex items-center justify-center mb-6">
-              <Code2 className="h-6 w-6 text-info" />
-            </div>
-            <h3 className="text-lg font-semibold text-foreground mb-3">Developer First</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              Syntax highlighting, smart autocomplete, and keyboard shortcuts for power users.
-            </p>
-          </div>
-
-          {/* Feature 3 */}
-          <div className="p-8 lg:p-10">
-            <div className="h-12 w-12 rounded-lg bg-warning/10 flex items-center justify-center mb-6">
-              <Layers className="h-6 w-6 text-warning" />
-            </div>
-            <h3 className="text-lg font-semibold text-foreground mb-3">Collections</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              Organize your requests into collections. Save, share, and reuse your API workflows.
-            </p>
-          </div>
-
-          {/* Feature 4 */}
-          <div className="p-8 lg:p-10">
-            <div className="h-12 w-12 rounded-lg bg-error/10 flex items-center justify-center mb-6">
-              <Shield className="h-6 w-6 text-error" />
-            </div>
-            <h3 className="text-lg font-semibold text-foreground mb-3">Secure</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              Your data is encrypted. We never store your API keys or sensitive information.
-            </p>
-          </div>
         </div>
       </section>
 

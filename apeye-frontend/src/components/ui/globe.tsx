@@ -3,25 +3,23 @@
 import { useEffect, useRef } from "react"
 import createGlobe, { COBEOptions } from "cobe"
 import { useMotionValue, useSpring } from "motion/react"
+import { useTheme } from "next-themes"
 
 import { cn } from "@/lib/utils"
 
 const MOVEMENT_DAMPING = 1400
+type GlobeConfig = Omit<COBEOptions, "dark" | "width" | "height" | "onRender">
 
-const GLOBE_CONFIG: COBEOptions = {
-  width: 800,
-  height: 800,
-  onRender: () => {},
+const GLOBE_CONFIG: GlobeConfig = {
   devicePixelRatio: 2,
   phi: 0,
   theta: 0.3,
-  dark: 1,
   diffuse: 0.4,
   mapSamples: 16000,
   mapBrightness: 1.2,
   baseColor: [1, 1, 1],
   markerColor: [251 / 255, 100 / 255, 21 / 255],
-  glowColor: [0.2, 0.2, 0.2],
+  glowColor: [0.7, 0.7, 0.7],
   markers: [
     { location: [14.5995, 120.9842], size: 0.03 },
     { location: [19.076, 72.8777], size: 0.1 },
@@ -41,13 +39,15 @@ export function Globe({
   config = GLOBE_CONFIG,
 }: {
   className?: string
-  config?: COBEOptions
+  config?: GlobeConfig
 }) {
   let phi = 0
   let width = 0
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const pointerInteracting = useRef<number | null>(null)
   const pointerInteractionMovement = useRef(0)
+  const { theme } = useTheme()
+
 
   const r = useMotionValue(0)
   const rs = useSpring(r, {
@@ -77,12 +77,13 @@ export function Globe({
         width = canvasRef.current.offsetWidth
       }
     }
-
+  
     window.addEventListener("resize", onResize)
     onResize()
-
+  
     const globe = createGlobe(canvasRef.current!, {
       ...config,
+      dark: theme === "dark" ? 1 : 0, // ✅ FIXED
       width: width * 2,
       height: width * 2,
       onRender: (state) => {
@@ -92,13 +93,15 @@ export function Globe({
         state.height = width * 2
       },
     })
-
+  
     setTimeout(() => (canvasRef.current!.style.opacity = "1"), 0)
+  
     return () => {
       globe.destroy()
       window.removeEventListener("resize", onResize)
     }
-  }, [rs, config])
+  }, [rs, config, theme]) // 👈 IMPORTANT: include theme
+  
 
   return (
     <div
