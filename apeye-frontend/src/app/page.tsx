@@ -46,17 +46,17 @@ export default function LandingPage() {
             <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
               <Zap className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold text-foreground">APEye</span>
+            <span className="text-3xl font-dm-sans tracking-tighter font-bold text-foreground">APEye</span>
           </div>
           
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <a href="#features" className="text-md text-foreground hover:text-foreground transition-colors">
               Features
             </a>
-            <a href="#demo" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <a href="#demo" className="text-md text-foreground hover:text-foreground transition-colors">
               Demo
             </a>
-            <a href="https://github.com" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+            <a href="https://github.com" className="text-md text-foreground hover:text-foreground transition-colors flex items-center gap-1">
               <Github className="h-4 w-4" />
               GitHub
             </a>
