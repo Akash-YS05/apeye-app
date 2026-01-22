@@ -266,156 +266,137 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="features" className="border-b">
-  <div className="container mx-auto flex flex-col gap-16 py-16">
-    
-    {/* Gemini effect first */}
-    <div className="w-full flex justify-center">
-      <GoogleGeminiEffectDemo />
-    </div>
+      <section id="features" className="">
+        <div className="container mx-auto flex flex-col gap-16 py-16">
+          
+          {/* Gemini effect first */}
+          <div className="w-full flex justify-center">
+            <GoogleGeminiEffectDemo />
+          </div>
 
-    {/* Text second */}
-    <div className="relative border-t pt-12">
-  <p className="px-8 font-dm-sans text-xl text-muted-foreground leading-relaxed tracking-tight max-w-4xl mx-auto">
-    Every API interaction should feel effortless. Write a request, hit send, and see the response
-    appear instantly -  no configuration walls, no waiting, no distractions. The entire workflow is
-    designed around speed and clarity, so you always know what you’re sending and what you’re
-    getting back. {" "}
-    <span className="text-accent-foreground">
-      One click is all it takes to go from request to response
-    </span>
-    , letting you stay focused on building instead of fighting tools. Whether you’re testing,
-    debugging, or exploring new endpoints, the platform keeps you moving fast, with everything you
-    need right where you expect it.
-  </p>
-</div>
+          {/* Text second */}
+          <div className="relative border-t pt-12">
+        <p className="px-8 font-dm-sans text-xl text-muted-foreground leading-relaxed tracking-tight max-w-4xl mx-auto">
+          Every API interaction should feel effortless. Write a request, hit send, and see the response
+          appear instantly -  no configuration walls, no waiting, no distractions. The entire workflow is
+          designed around speed and clarity, so you always know what you’re sending and what you’re
+          getting back. {" "}
+          <span className="text-accent-foreground">
+            One click is all it takes to go from request to response
+          </span>
+          , letting you stay focused on building instead of fighting tools. Whether you’re testing,
+          debugging, or exploring new endpoints, the platform keeps you moving fast, with everything you
+          need right where you expect it.
+        </p>
+      </div>
 
 
-  </div>
-</section>
+        </div>
+      </section>
 
       {/* CTA Section */}
-      <section className="border-t">
-        {/* <div className="container mx-auto px-6 py-20 lg:py-32">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Ready to supercharge your API testing?
-            </h2>
-            <p className="text-lg text-muted-foreground mb-8">
-              Join developers who test APIs faster and smarter with APEye.
-            </p>
-            <div className="flex items-center justify-center gap-4">
-              {session ? (
-                <Link href="/app">
-                  <Button size="lg" className="gap-2 h-12 px-8">
-                    Open App
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-              ) : (
-                <Link href="/register">
-                  <Button size="lg" className="gap-2 h-12 px-8">
-                    Get Started for Free
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-              )}
-              <Link href="https://github.com" target="_blank">
-                <Button size="lg" variant="outline" className="h-12 px-8 gap-2">
-                  <Github className="h-4 w-4" />
-                  Star on GitHub
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div> */}
-        <div className="relative h-100 mx-20 overflow-hidden rounded-xl">
+      <section className="">
+        <div className="relative h-100 m-20 overflow-hidden rounded-xl">
           <FloatingLines/>
           <div>
-              <h2 className="text-3xl md:text-6xl font-dm-sans tracking-tighter text-center mt-10 text-foreground mb-4 z-auto">
+              <h2 className="text-3xl md:text-6xl font-dm-sans tracking-tighter text-center mt-10 text-foreground mb-4">
                 Test any API. Anywhere. Instantly.
               </h2>
               <h3 className="text-2xl text-foreground m-8 mx-auto text-center font-dm-sans tracking-tight">
                   From localhost to production, one platform for everything.
               </h3>
               <div className='border mx-30'></div>
-              {/* <p className='text-muted-foreground text-lg text-center mb-6'>Make your development phase smoother and faster</p> */}
-              <div className="flex items-center justify-center gap-4 m-12">
+                <div className="flex items-center justify-center gap-4 mt-12 z-10">
                 {session ? (
+                  <NoiseBackground
+                  containerClassName="w-fit p-2 rounded-md"
+                  gradientColors={[
+                    "rgb(255, 100, 150)",
+                    "rgb(100, 150, 255)",
+                    "rgb(255, 200, 100)",
+                  ]}
+                >
                   <Link href="/app">
-                    <Button size="lg" className="gap-2 h-12 px-8">
+                    <button className="flex items-center gap-2 h-12 px-6 rounded-sm bg-linear-to-r from-neutral-100 via-neutral-100 to-white text-black shadow-[0px_2px_0px_0px_var(--color-neutral-50)_inset,0px_0.5px_1px_0px_var(--color-neutral-400)] transition-all duration-100 active:scale-98 dark:from-slate-700 dark:via-slate-800 dark:to-neutral-800 dark:text-white dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)]">
                       Open App
                       <ArrowRight className="h-4 w-4" />
-                    </Button>
+                    </button>
                   </Link>
+                </NoiseBackground>
                 ) : (
                   <Link href="/register">
-                    <Button size="lg" className="gap-2 h-12 px-8">
+                    <Button size="lg" className="gap-2 h-12 px-8 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]">
                       Get Started for Free
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </Link>
                 )}
                 <Link href="https://github.com" target="_blank">
-                  <Button size="lg" variant="outline" className="h-12 px-8 gap-2">
+                  <Button size="lg" variant="outline" className="h-12 px-8 cursor-pointer gap-2 shadow-[inset_0_0_4px_rgba(0,0,0,0.1)]">
                     <Github className="h-4 w-4" />
                     Star on GitHub
                   </Button>
                 </Link>
               </div>
             </div>
-          {/* <LightRays />
-          <div className='grid md:grid-cols-2'>
-            <div>
-              <h2 className="text-3xl md:text-5xl font-dm-sans tracking-tighter text-center mt-10 text-foreground mb-4">
-                Exactly what your APIs need.
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8">
-                  Join developers who test APIs faster and smarter with APEye.
-              </p>
-              <div className="flex items-center justify-center gap-4">
-                {session ? (
-                  <Link href="/app">
-                    <Button size="lg" className="gap-2 h-12 px-8">
-                      Open App
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                ) : (
-                  <Link href="/register">
-                    <Button size="lg" className="gap-2 h-12 px-8">
-                      Get Started for Free
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                )}
-                <Link href="https://github.com" target="_blank">
-                  <Button size="lg" variant="outline" className="h-12 px-8 gap-2">
-                    <Github className="h-4 w-4" />
-                    Star on GitHub
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            <div className='relative w-full h-96'>
-              <Image src={'/cta_pic.png'} alt='cta' fill></Image>
-            </div>
-          </div> */}
         </div>
       </section>
 
       {/* Footer */}
       <footer className="">
-        <div className="p-0 m-0 leading-none grid lg:grid-cols-2">
-          <div>
-            <TextHoverEffectDemo/>
-            {/* <p className='text-3xl mb'>Test globally, debug locally</p> */}
-          </div>
-          <div className='lg:border-l m-4'>
-
-          </div>
+  <div className="p-0 m-0 leading-none grid lg:grid-cols-2">
+    <div>
+      <TextHoverEffectDemo/>
+    </div>
+    <div className='lg:border-l p-8 lg:p-12'>
+      {/* Contact Section */}
+      <div className="space-y-6">
+        <h3 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
+          Contact
+        </h3>
+        
+        {/* Social Links with Names */}
+        <div className="flex flex-col gap-4">
+          <Link 
+            href="https://github.com/Akash-YS05" 
+            target="_blank" 
+            className="flex items-center gap-3 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors group"
+          >
+            <Github className="h-5 w-5" />
+            <span className="group-hover:underline">GitHub</span>
+          </Link>
+          
+          <Link 
+            href="https://linkedin.com/in/li-akash-pandey" 
+            target="_blank" 
+            className="flex items-center gap-3 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors group"
+          >
+            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+            <span className="group-hover:underline">LinkedIn</span>
+          </Link>
+          
+          <Link 
+            href="https://x.com/akashpandeytwt" 
+            target="_blank" 
+            className="flex items-center gap-3 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors group"
+          >
+            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+            <span className="group-hover:underline">X (Twitter)</span>
+          </Link>
         </div>
-      </footer>
+      </div>
+      
+      {/* Copyright */}
+      <div className="mt-12 text-sm text-neutral-600 dark:text-neutral-400">
+        <p>© {new Date().getFullYear()} APEye. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
     </div>
   );
 }
