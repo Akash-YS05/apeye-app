@@ -9,7 +9,7 @@ interface Item {
   description: string
   icon: LucideIcon
   color: string
-  time: string
+  time?: string
 }
 
 
@@ -57,29 +57,29 @@ interface Item {
     let notifications: Item[] = [
         {
           name: "Lightning Fast",
-          description: "Magic UI",
-          time: "15m ago",
+          description: "Saves time with speedy responses",
+        //   time: "15m ago",
           icon: Zap,
           color: "#00C9A7",
         },
         {
           name: "Secure",
           description: "Magic UI",
-          time: "10m ago",
+        //   time: "10m ago",
           icon: Shield,
           color: "#FFB800",
         },
         {
           name: "Collections",
           description: "Magic UI",
-          time: "5m ago",
+        //   time: "5m ago",
           icon: Layers,
           color: "#FF3D71",
         },
         {
           name: "Developer First",
           description: "Magic UI",
-          time: "2m ago",
+        //   time: "2m ago",
           icon: Code2,
           color: "#1E86FF",
         },

@@ -19,6 +19,7 @@ import { AnimatedListDemo } from '@/components/ui/feature-list';
 import { NoiseBackground } from '@/components/ui/noise-background';
 import { GoogleGeminiEffect } from '@/components/ui/google-gemini-effect';
 import { GoogleGeminiEffectDemo } from '@/components/ui/req-res';
+import { GlowingEffectDemoSecond } from '@/components/ui/feature-grid';
 
 export default function LandingPage() {
   const [mounted, setMounted] = useState(false);
@@ -226,13 +227,17 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <div className='mx-auto p-10'>
+      <GlowingEffectDemoSecond/>
+      </div>
+
       {/* Features Grid */}
       <section id="features" className="border-b">
-        <div className="container mx-auto grid lg:grid-cols-2">
-          <div>
+        <div className="container mx-auto">
+          {/* <div>
           <AnimatedListDemo/>
-          </div>
-          <div className='relative border-l my-4'>
+          </div> */}
+          <div className='relative border-t my-4'>
           <p className="p-8 font-dm-sans text-xl text-muted-foreground leading-relaxed tracking-tight">
             Built with developers in mind, the platform offers a <span className='text-accent-foreground'> clean, intuitive interface</span> that makes API testing effortless and fast. 
             You can organize your requests into collections, making it <span className='text-accent-foreground'>easy to save, reuse, and share</span> complete workflows across projects 
