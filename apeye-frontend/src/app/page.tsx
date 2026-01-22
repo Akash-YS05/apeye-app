@@ -124,7 +124,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section - Split Layout */}
-      <section className="border-b">
+      <section className="border-b lg:px-10">
         <div className="container mx-auto grid lg:grid-cols-[3fr_2fr] min-h-[600px]">
           {/* Left - Content */}
           <div className="flex flex-col justify-center py-16">
@@ -220,7 +220,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Headline */}
-      <section className="py-20 border-b">
+      <section className="py-20 border-b lg:px-10">
         <div className="container mx-auto px-3">
           <h2 className="text-4xl md:text-6xl font-dm-sans tracking-tighter text-foreground mb-4">
             Everything you need to test APIs
@@ -255,7 +255,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-20 border-b">
+      <section className="py-20 border-b lg:px-10">
         <div className="container mx-auto px-3">
           <h2 className="text-4xl md:text-6xl font-dm-sans tracking-tighter text-foreground mb-4">
             Accurate responses, just one click away.
