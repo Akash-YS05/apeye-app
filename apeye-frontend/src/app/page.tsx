@@ -21,6 +21,7 @@ import { GoogleGeminiEffect } from '@/components/ui/google-gemini-effect';
 import { GoogleGeminiEffectDemo } from '@/components/ui/req-res';
 import { GlowingEffectDemoSecond } from '@/components/ui/feature-grid';
 import { TextHoverEffectDemo } from '@/components/ui/footer';
+import { LightRays } from '@/components/ui/light-rays';
 
 export default function LandingPage() {
   const [mounted, setMounted] = useState(false);
@@ -355,8 +356,8 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="border-t bg-muted/30">
-        <div className="container mx-auto px-6 py-20 lg:py-32">
+      <section className="border-t">
+        {/* <div className="container mx-auto px-6 py-20 lg:py-32">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Ready to supercharge your API testing?
@@ -386,6 +387,45 @@ export default function LandingPage() {
                   Star on GitHub
                 </Button>
               </Link>
+            </div>
+          </div>
+        </div> */}
+        <div className="relative h-[400px] mx-20 overflow-hidden rounded-xl border">
+          <LightRays />
+          <div className='grid md:grid-cols-2'>
+            <div>
+              <h2 className="text-3xl md:text-5xl font-dm-sans tracking-tighter text-center mt-10 text-foreground mb-4">
+                Exactly what your APIs need.
+              </h2>
+              <p className="text-lg text-muted-foreground mb-8">
+                  Join developers who test APIs faster and smarter with APEye.
+              </p>
+              <div className="flex items-center justify-center gap-4">
+                {session ? (
+                  <Link href="/app">
+                    <Button size="lg" className="gap-2 h-12 px-8">
+                      Open App
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link href="/register">
+                    <Button size="lg" className="gap-2 h-12 px-8">
+                      Get Started for Free
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                )}
+                <Link href="https://github.com" target="_blank">
+                  <Button size="lg" variant="outline" className="h-12 px-8 gap-2">
+                    <Github className="h-4 w-4" />
+                    Star on GitHub
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div className='relative w-full h-96'>
+              <Image src={'/cta_pic.png'} alt='cta' fill></Image>
             </div>
           </div>
         </div>
