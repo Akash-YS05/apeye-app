@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight, Zap, Code2, Shield, Sparkles, Clock, Layers, Github, User, LogOut } from 'lucide-react';
+import { ArrowRight, Zap, Code2, Shield, Sparkles, Clock, Layers, Github, User, LogOut, Terminal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
@@ -16,6 +16,9 @@ import {
 import Image from 'next/image';
 import { Globe } from '@/components/ui/globe';
 import { AnimatedListDemo } from '@/components/ui/feature-list';
+import { NoiseBackground } from '@/components/ui/noise-background';
+import { GoogleGeminiEffect } from '@/components/ui/google-gemini-effect';
+import { GoogleGeminiEffectDemo } from '@/components/ui/req-res';
 
 export default function LandingPage() {
   const [mounted, setMounted] = useState(false);
@@ -134,27 +137,48 @@ export default function LandingPage() {
               A modern, beautiful API client built for developers who value speed 
               and simplicity. Test, debug, and document your APIs with ease.
             </p>
-            
+
             <div className="flex items-center gap-4">
               {session ? (
-                <Link href="/app">
-                  <Button size="lg" className="gap-2 h-12 px-6">
-                    Open App
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
+                <NoiseBackground
+                  containerClassName="w-fit p-2 rounded-md"
+                  gradientColors={[
+                    "rgb(255, 100, 150)",
+                    "rgb(100, 150, 255)",
+                    "rgb(255, 200, 100)",
+                  ]}
+                >
+                  <Link href="/app">
+                    <button className="flex items-center gap-2 h-12 px-6 rounded-sm bg-linear-to-r from-neutral-100 via-neutral-100 to-white text-black shadow-[0px_2px_0px_0px_var(--color-neutral-50)_inset,0px_0.5px_1px_0px_var(--color-neutral-400)] transition-all duration-100 active:scale-98 dark:from-black dark:via-black dark:to-neutral-900 dark:text-white dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)]">
+                      Open App
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </Link>
+                </NoiseBackground>
               ) : (
                 <>
-                  <Link href="/register">
-                    <Button size="lg" className="gap-2 h-12 px-6">
-                      Get Started Free
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
+                  {/* Get Started */}
+                  <NoiseBackground
+                    containerClassName="w-fit p-2 rounded-full"
+                    gradientColors={[
+                      "rgb(255, 100, 150)",
+                      "rgb(100, 150, 255)",
+                      "rgb(255, 200, 100)",
+                    ]}
+                  >
+                    <Link href="/register">
+                      <button className="flex items-center gap-2 h-12 px-6 rounded-sm bg-linear-to-r from-neutral-100 via-neutral-100 to-white text-black shadow-[0px_2px_0px_0px_var(--color-neutral-50)_inset,0px_0.5px_1px_0px_var(--color-neutral-400)] transition-all duration-100 active:scale-98 dark:from-black dark:via-black dark:to-neutral-900 dark:text-white dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)]">
+                        Get Started Free
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    </Link>
+                  </NoiseBackground>
+
+                  {/* View Demo */}
                   <Link href="/login">
-                    <Button size="lg" variant="outline" className="h-12 px-6">
+                    <button className="h-12 px-6 rounded-full border border-neutral-300 dark:border-neutral-700 text-foreground hover:bg-muted transition">
                       View Demo
-                    </Button>
+                    </button>
                   </Link>
                 </>
               )}
@@ -221,6 +245,46 @@ export default function LandingPage() {
 
         </div>
       </section>
+
+      <section className="py-20 border-b">
+        <div className="container mx-auto px-3">
+          <h2 className="text-4xl md:text-6xl font-dm-sans tracking-tighter text-foreground mb-4">
+            Accurate responses, just one click away.
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl">
+            See what your APIs will return instantly, improving efficiency.
+          </p>
+        </div>
+      </section>
+
+      <section id="features" className="border-b">
+  <div className="container mx-auto flex flex-col gap-16 py-16">
+    
+    {/* Gemini effect first */}
+    <div className="w-full flex justify-center">
+      <GoogleGeminiEffectDemo />
+    </div>
+
+    {/* Text second */}
+    <div className="relative border-t pt-12">
+  <p className="px-8 font-dm-sans text-xl text-muted-foreground leading-relaxed tracking-tight max-w-4xl mx-auto">
+    Every API interaction should feel effortless. Write a request, hit send, and see the response
+    appear instantly -  no configuration walls, no waiting, no distractions. The entire workflow is
+    designed around speed and clarity, so you always know what you’re sending and what you’re
+    getting back. {" "}
+    <span className="text-accent-foreground">
+      One click is all it takes to go from request to response
+    </span>
+    , letting you stay focused on building instead of fighting tools. Whether you’re testing,
+    debugging, or exploring new endpoints, the platform keeps you moving fast, with everything you
+    need right where you expect it.
+  </p>
+</div>
+
+
+  </div>
+</section>
+
 
       {/* Demo Section */}
       <section id="demo" className="py-20 lg:py-32">
