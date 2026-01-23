@@ -103,9 +103,9 @@
     --code-border: #e5e5e5;
     
     /* Toast */
-    --toast-bg: 0 0% 100%;
-    --toast-color: 222.2 84% 4.9%;
-    --toast-border: 214.3 31.8% 91.4%;
+    --toast-bg: #ffffff;
+    --toast-color: #18181b;
+    --toast-border: #e2e8f0;
   }
 
   .dark {
@@ -182,9 +182,9 @@
     --code-border: #333333;
     
     /* Toast */
-    --toast-bg: 217.2 32.6% 8%;
-    --toast-color: 210 40% 98%;
-    --toast-border: 217.2 32.6% 17.5%;
+    --toast-bg: #18181b;
+    --toast-color: #fafafa;
+    --toast-border: #27272a;
   }
 }
 
