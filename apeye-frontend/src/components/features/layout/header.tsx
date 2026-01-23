@@ -32,18 +32,18 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
   const userPlan = (session?.user as any)?.plan || 'free';
 
   return (
-    <header className="h-14 border-b flex items-center justify-between px-4 bg-card">
-      <div className="flex items-center gap-3">
+    <header className="h-14 border-b flex items-center justify-between px-2 sm:px-4 bg-card">
+      <div className="flex items-center gap-2 sm:gap-3">
         <Button variant="ghost" size="icon" onClick={onToggleSidebar}>
           <Menu className="h-5 w-5" />
         </Button>
-        <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+        <h1 className="text-lg sm:text-xl font-dm-sans tracking-tight font-bold">
           APEye
         </h1>
       </div>
 
-      <div className="flex items-center gap-2">
-        <div className="text-sm mr-2">
+      <div className="flex items-center gap-1 sm:gap-2">
+        <div className="text-sm mr-1 sm:mr-2 hidden sm:block">
           <span className="text-muted-foreground">Plan: </span>
           <span className="font-medium capitalize text-primary">{userPlan}</span>
         </div>
@@ -69,6 +69,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
               <div className="flex flex-col">
                 <span className="text-sm font-medium">{session?.user?.name || 'User'}</span>
                 <span className="text-xs text-muted-foreground">{session?.user?.email}</span>
+                <span className="text-xs text-muted-foreground sm:hidden mt-1">Plan: <span className="capitalize text-primary">{userPlan}</span></span>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />

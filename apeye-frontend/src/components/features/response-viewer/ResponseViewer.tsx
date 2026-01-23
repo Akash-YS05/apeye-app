@@ -107,25 +107,26 @@ export default function ResponseViewer() {
   return (
     <div className="h-full flex flex-col overflow-hidden bg-background">
       {/* Response Status Bar */}
-      <div className="p-4 py-2 border-b flex items-center justify-between flex-shrink-0 bg-card">
-        <div className="flex items-center gap-4">
-          <Badge className={`${getStatusColor(response.status)} text-white px-3 py-1`}>
+      <div className="p-2 sm:p-4 sm:py-2 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 flex-shrink-0 bg-card">
+        <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
+          <Badge className={`${getStatusColor(response.status)} text-white px-2 sm:px-3 py-1 text-xs sm:text-sm`}>
             {response.statusText}
           </Badge>
-          <span className="text-sm text-muted-foreground">
-            Time: <span className="font-medium text-foreground">{formatTime(response.time)}</span>
+          <span className="text-xs sm:text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">{formatTime(response.time)}</span>
           </span>
-          <span className="text-sm text-muted-foreground">
-            Size: <span className="font-medium text-foreground">{formatBytes(response.size)}</span>
+          <span className="text-xs sm:text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">{formatBytes(response.size)}</span>
           </span>
         </div>
   
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           {(isJsonResponse || isXmlResponse || isHtmlResponse) && (
             <Button
               variant="outline"
               size="sm"
               onClick={() => setPrettyPrint(!prettyPrint)}
+              className="text-xs sm:text-sm h-8"
             >
               {prettyPrint ? 'Raw' : 'Pretty'}
             </Button>
@@ -135,16 +136,17 @@ export default function ResponseViewer() {
             variant="outline"
             size="sm"
             onClick={handleCopyBody}
+            className="text-xs sm:text-sm h-8"
           >
             {bodyCopied ? (
               <>
-                <Check className="h-4 w-4 mr-1" />
-                Copied
+                <Check className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Copied</span>
               </>
             ) : (
               <>
-                <Copy className="h-4 w-4 mr-1" />
-                Copy
+                <Copy className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1" />
+                <span className="hidden sm:inline">Copy</span>
               </>
             )}
           </Button>
@@ -153,9 +155,10 @@ export default function ResponseViewer() {
             variant="outline"
             size="sm"
             onClick={handleDownload}
+            className="text-xs sm:text-sm h-8"
           >
-            <Download className="h-4 w-4 mr-1" />
-            Download
+            <Download className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Download</span>
           </Button>
         </div>
       </div>
@@ -163,12 +166,12 @@ export default function ResponseViewer() {
       {/* Response Tabs */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
-          <TabsList className="w-fit justify-start border-b px-4 flex-shrink-0 rounded">
-            <TabsTrigger value="body">Body</TabsTrigger>
-            <TabsTrigger value="headers">Headers ({Object.keys(response.headers).length})</TabsTrigger>
+          <TabsList className="w-fit justify-start border-b px-2 sm:px-4 flex-shrink-0 rounded">
+            <TabsTrigger value="body" className="text-xs sm:text-sm">Body</TabsTrigger>
+            <TabsTrigger value="headers" className="text-xs sm:text-sm">Headers ({Object.keys(response.headers).length})</TabsTrigger>
           </TabsList>
   
-          <TabsContent value="body" className="flex-1 p-4 overflow-auto m-0">
+          <TabsContent value="body" className="flex-1 p-2 sm:p-4 overflow-auto m-0">
             {response.data ? (
               <CodeBlock
                 code={getResponseBody()}
@@ -177,18 +180,18 @@ export default function ResponseViewer() {
                 wrapLines={prettyPrint}
               />
             ) : (
-              <Card className="p-8 text-center">
-                <p className="text-muted-foreground">No response body</p>
+              <Card className="p-4 sm:p-8 text-center">
+                <p className="text-muted-foreground text-sm">No response body</p>
               </Card>
             )}
           </TabsContent>
   
-          <TabsContent value="headers" className="flex-1 p-4 overflow-auto m-0">
-            <Card className="p-4">
-              <div className="space-y-3">
+          <TabsContent value="headers" className="flex-1 p-2 sm:p-4 overflow-auto m-0">
+            <Card className="p-2 sm:p-4">
+              <div className="space-y-2 sm:space-y-3">
                 {Object.entries(response.headers).map(([key, value]) => (
-                  <div key={key} className="flex gap-4 text-sm border-b pb-2 last:border-0">
-                    <span className="font-medium text-foreground min-w-[200px]">{key}:</span>
+                  <div key={key} className="flex flex-col sm:flex-row sm:gap-4 text-xs sm:text-sm border-b pb-2 last:border-0">
+                    <span className="font-medium text-foreground sm:min-w-[200px]">{key}:</span>
                     <span className="text-muted-foreground break-all flex-1">{value}</span>
                   </div>
                 ))}
