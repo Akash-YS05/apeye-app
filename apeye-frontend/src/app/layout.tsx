@@ -12,6 +12,9 @@ const dm_sans = DM_Sans({
 export const metadata: Metadata = {
   title: "APEye - Modern API Testing Tool",
   description: "Test, debug, and manage your APIs with ease",
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export default function RootLayout({

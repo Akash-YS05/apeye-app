@@ -19,14 +19,14 @@ export const GoogleGeminiEffect = ({
   className?: string;
 }) => {
   return (
-    <div className={cn("sticky top-10", className)}>
+    <div className={cn("sticky top-40 md:lg-20 lg:top-10", className)}>
       <p className="text-lg md:text-7xl font-dm-sans text-foreground tracking-tighter p-8 text-center bg-clip-text bg-gradient-to-b from-neutral-100 to-neutral-300">
         {title}
       </p>
       <p className="text-xs md:text-xl text-muted-foreground text-center mt-4 max-w-lg mx-auto">
         {description}
       </p>
-      <div className="w-full h-[890px] -top-60 md:-top-36  flex items-center justify-center bg-red-transparent absolute ">
+      <div className="w-full h-[890px] -top-55 md:-top-42 lg:-top-38  flex items-center justify-center bg-red-transparent absolute ">
         <button className="font-bold bg-white rounded-full md:px-4 md:py-2 px-2 py-1 md:mt-24 mt-8 z-30 md:text-base text-black text-xs  w-fit mx-auto ">
           Quick Results
         </button>
