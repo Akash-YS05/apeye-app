@@ -172,7 +172,7 @@ export default function LandingPage() {
                     ]}
                   >
                     <Link href="/register">
-                      <button className="flex items-center gap-2 h-12 px-6 rounded-sm bg-linear-to-r from-neutral-100 via-neutral-100 to-white text-black shadow-[0px_2px_0px_0px_var(--color-neutral-50)_inset,0px_0.5px_1px_0px_var(--color-neutral-400)] transition-all duration-100 active:scale-98 dark:from-black dark:via-black dark:to-neutral-900 dark:text-white dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)]">
+                      <button className="flex items-center gap-2 h-12 px-6 rounded-sm bg-linear-to-r from-neutral-100 via-neutral-100 to-white text-black shadow-[0px_2px_0px_0px_var(--color-neutral-50)_inset,0px_0.5px_1px_0px_var(--color-neutral-400)] transition-all duration-100 active:scale-98 dark:from-black dark:via-black dark:to-neutral-900 dark:text-white dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)] cursor-pointer">
                         Get Started Free
                         <ArrowRight className="h-4 w-4" />
                       </button>
@@ -181,7 +181,7 @@ export default function LandingPage() {
 
                   {/* View Demo */}
                   <Link href="/login">
-                    <button className="h-12 px-6 rounded-full border border-neutral-300 dark:border-neutral-700 text-foreground hover:bg-muted transition">
+                    <button className="h-12 px-6 rounded-md cursor-pointer border border-neutral-300 dark:border-neutral-700 text-foreground hover:bg-muted transition">
                       View Demo
                     </button>
                   </Link>
@@ -190,7 +190,7 @@ export default function LandingPage() {
             </div>
 
             {/* Quick Stats */}
-            <div className="flex items-center font-dm-sans gap-8 mt-12 pt-8 border-t">
+            {/* <div className="flex items-center font-dm-sans gap-8 mt-12 pt-8 border-t">
               <div>
                 <div className="text-2xl font-bold text-foreground">10ms</div>
                 <div className="text-sm text-muted-foreground">Avg Response</div>
@@ -203,7 +203,7 @@ export default function LandingPage() {
                 <div className="text-2xl font-bold text-foreground">Unlimited</div>
                 <div className="text-sm text-muted-foreground">Requests</div>
               </div>
-            </div>
+            </div> */}
           </div>
           
           {/* Right - Terminal Preview */}
@@ -324,12 +324,21 @@ export default function LandingPage() {
                   </Link>
                 </NoiseBackground>
                 ) : (
+                  <NoiseBackground
+                  containerClassName="w-fit p-2 rounded-md"
+                  gradientColors={[
+                    "rgb(255, 100, 150)",
+                    "rgb(100, 150, 255)",
+                    "rgb(255, 200, 100)",
+                  ]}
+                >
                   <Link href="/register">
-                    <Button size="lg" className="gap-2 h-12 px-8 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]">
+                    <button className="flex items-center gap-2 h-12 px-6 rounded-sm bg-linear-to-r from-neutral-100 via-neutral-100 to-white text-black shadow-[0px_2px_0px_0px_var(--color-neutral-50)_inset,0px_0.5px_1px_0px_var(--color-neutral-400)] transition-all duration-100 active:scale-98 dark:from-slate-700 dark:via-slate-800 dark:to-neutral-800 dark:text-white dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)] cursor-pointer">
                       Get Started for Free
                       <ArrowRight className="h-4 w-4" />
-                    </Button>
+                    </button>
                   </Link>
+                </NoiseBackground>
                 )}
                 <Link href="https://github.com" target="_blank">
                   <Button size="lg" variant="outline" className="h-12 px-8 cursor-pointer gap-2 shadow-[inset_0_0_4px_rgba(0,0,0,0.1)]">
