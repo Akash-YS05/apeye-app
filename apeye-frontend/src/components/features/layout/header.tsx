@@ -38,7 +38,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
           <Menu className="h-5 w-5" />
         </Button>
         <h1 className="text-lg sm:text-xl font-dm-sans tracking-tight font-bold">
-          APEye
+          <a href="/">APEye</a>
         </h1>
       </div>
 

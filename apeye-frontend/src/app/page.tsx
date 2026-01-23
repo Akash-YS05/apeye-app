@@ -48,22 +48,25 @@ export default function LandingPage() {
       <header className="border-b bg-card/80 backdrop-blur-md sticky top-0 z-50">
         <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-lg bg-primary flex items-center justify-center">
-              <Zap className="h-5 w-5 text-primary-foreground" />
+            <div className="h-9 w-9 rounded-lg bg-primary">
+              <Image src={'/icon.svg'} width={100} height={100} alt='logo'></Image>
             </div>
-            <span className="text-2xl sm:text-3xl font-dm-sans tracking-tighter font-bold text-foreground">APEye</span>
+            <span className="text-2xl sm:text-3xl font-dm-sans tracking-tighter font-bold text-foreground"><a href="#">APEye</a></span>
           </div>
           
           <nav className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-md text-foreground hover:text-foreground transition-colors">
               Features
             </a>
-            <a href="#demo" className="text-md text-foreground hover:text-foreground transition-colors">
+            {/* <a href="#demo" className="text-md text-foreground hover:text-foreground transition-colors">
               Demo
-            </a>
-            <a href="https://github.com" className="text-md text-foreground hover:text-foreground transition-colors flex items-center gap-1">
+            </a> */}
+            <a href="https://github.com/Akash-YS05/apeye-app" className="text-md text-foreground hover:text-foreground transition-colors flex items-center gap-1">
               <Github className="h-4 w-4" />
               GitHub
+            </a>
+            <a href="#contact" className="text-md text-foreground hover:text-foreground transition-colors flex items-center gap-1">
+              Contact
             </a>
           </nav>
           
@@ -143,15 +146,15 @@ export default function LandingPage() {
               >
                 Features
               </a>
-              <a 
+              {/* <a 
                 href="#demo" 
                 className="text-md text-foreground hover:text-foreground transition-colors py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Demo
-              </a>
+              </a> */}
               <a 
-                href="https://github.com" 
+                href="https://github.com/Akash-YS05/apeye-app" 
                 className="text-md text-foreground hover:text-foreground transition-colors flex items-center gap-1 py-2"
               >
                 <Github className="h-4 w-4" />
@@ -239,32 +242,9 @@ export default function LandingPage() {
                       </button>
                     </Link>
                   </NoiseBackground>
-
-                  {/* View Demo */}
-                  {/* <Link href="/login" className="w-full sm:w-auto">
-                    <button className="h-12 px-6 w-full sm:w-auto rounded-md cursor-pointer border border-neutral-300 dark:border-neutral-700 text-foreground hover:bg-muted transition">
-                      View Demo
-                    </button>
-                  </Link> */}
                 </>
               )}
             </div>
-
-            {/* Quick Stats */}
-            {/* <div className="flex items-center font-dm-sans gap-8 mt-12 pt-8 border-t">
-              <div>
-                <div className="text-2xl font-bold text-foreground">10ms</div>
-                <div className="text-sm text-muted-foreground">Avg Response</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-foreground">100%</div>
-                <div className="text-sm text-muted-foreground">Free & Open</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-foreground">Unlimited</div>
-                <div className="text-sm text-muted-foreground">Requests</div>
-              </div>
-            </div> */}
           </div>
           
           {/* Right - Terminal Preview (hidden on mobile, shown on lg+) */}
@@ -307,7 +287,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Headline - visible only on desktop */}
-      <section className="hidden lg:block py-12 sm:py-16 lg:py-20 border-b px-4 sm:px-6 lg:px-10">
+      <section id="features" className="hidden lg:block py-12 sm:py-16 lg:py-20 border-b px-4 sm:px-6 lg:px-10">
         <div className="container mx-auto px-3">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-dm-sans tracking-tighter text-foreground mb-4">
             Everything you need to test APIs
@@ -323,7 +303,7 @@ export default function LandingPage() {
       </div>
 
       {/* Features Grid */}
-      <section id="features" className="border-b">
+      <section className="border-b">
         <div className="container mx-auto">
 
           <div className='relative border-t my-4'>
@@ -425,7 +405,7 @@ export default function LandingPage() {
                   </Link>
                 </NoiseBackground>
                 )}
-                <Link href="https://github.com" target="_blank" className="w-full sm:w-auto">
+                <Link href="https://github.com/Akash-YS05/apeye-app" target="_blank" className="w-full sm:w-auto">
                   <Button size="lg" variant="outline" className="h-12 px-8 w-full sm:w-auto cursor-pointer gap-2 shadow-[inset_0_0_4px_rgba(0,0,0,0.1)]">
                     <Github className="h-4 w-4" />
                     Star on GitHub
@@ -437,60 +417,62 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="">
-  <div className="p-0 m-0 leading-none grid grid-cols-1 lg:grid-cols-2">
-    <div className="hidden sm:block">
-      <TextHoverEffectDemo/>
-    </div>
-    <div className='lg:border-l p-6 sm:p-8 lg:p-12'>
-      {/* Contact Section */}
-      <div className="space-y-6">
-        <h3 className="text-xl sm:text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
-          Contact
-        </h3>
-        
-        {/* Social Links with Names */}
-        <div className="flex flex-col gap-4">
-          <Link 
-            href="https://github.com/Akash-YS05" 
-            target="_blank" 
-            className="flex items-center gap-3 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors group"
-          >
-            <Github className="h-5 w-5" />
-            <span className="group-hover:underline">GitHub</span>
-          </Link>
-          
-          <Link 
-            href="https://linkedin.com/in/li-akash-pandey" 
-            target="_blank" 
-            className="flex items-center gap-3 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors group"
-          >
-            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-            </svg>
-            <span className="group-hover:underline">LinkedIn</span>
-          </Link>
-          
-          <Link 
-            href="https://x.com/akashpandeytwt" 
-            target="_blank" 
-            className="flex items-center gap-3 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors group"
-          >
-            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-            <span className="group-hover:underline">X (Twitter)</span>
-          </Link>
-        </div>
-      </div>
-      
-      {/* Copyright */}
-      <div className="mt-8 sm:mt-12 text-sm text-neutral-600 dark:text-neutral-400">
-        <p>© {new Date().getFullYear()} APEye. All rights reserved.</p>
-      </div>
-    </div>
-  </div>
-</footer>
+      <section id='contact'>
+        <footer className="">
+          <div className="p-0 m-0 leading-none grid grid-cols-1 lg:grid-cols-2">
+            <div className="hidden sm:block">
+              <TextHoverEffectDemo/>
+            </div>
+            <div className='lg:border-l p-6 sm:p-8 lg:p-12'>
+              {/* Contact Section */}
+              <div className="space-y-6">
+                <h3 className="text-xl sm:text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
+                  Contact
+                </h3>
+                
+                {/* Social Links with Names */}
+                <div className="flex flex-col gap-4">
+                  <Link 
+                    href="https://github.com/Akash-YS05" 
+                    target="_blank" 
+                    className="flex items-center gap-3 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors group"
+                  >
+                    <Github className="h-5 w-5" />
+                    <span className="group-hover:underline">GitHub</span>
+                  </Link>
+                  
+                  <Link 
+                    href="https://linkedin.com/in/li-akash-pandey" 
+                    target="_blank" 
+                    className="flex items-center gap-3 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors group"
+                  >
+                    <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                    <span className="group-hover:underline">LinkedIn</span>
+                  </Link>
+                  
+                  <Link 
+                    href="https://x.com/akashpandeytwt" 
+                    target="_blank" 
+                    className="flex items-center gap-3 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors group"
+                  >
+                    <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                    <span className="group-hover:underline">X (Twitter)</span>
+                  </Link>
+                </div>
+              </div>
+              
+              {/* Copyright */}
+              <div className="mt-8 sm:mt-12 text-sm text-neutral-600 dark:text-neutral-400">
+                <p>© {new Date().getFullYear()} APEye. All rights reserved.</p>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </section>
     </div>
   );
 }
