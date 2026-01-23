@@ -5,13 +5,18 @@ import (
 	"crypto/tls"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 )
+
+// ErrPrivateURL is returned when trying to access localhost or private IPs
+var ErrPrivateURL = errors.New("cannot reach localhost or private IP addresses from the deployed server. Please use a public URL, or use a tunneling service like ngrok to expose your local server")
 
 // Client wraps http.Client with additional functionality
 type Client struct {
@@ -35,14 +40,47 @@ func NewClient() *Client {
 	}
 }
 
+// isPrivateURL checks if the URL points to localhost or private IP addresses
+func isPrivateURL(rawURL string) bool {
+	parsedURL, err := url.Parse(rawURL)
+	if err != nil {
+		return false
+	}
+
+	host := parsedURL.Hostname()
+
+	// Check for localhost
+	if host == "localhost" {
+		return true
+	}
+
+	// Parse as IP
+	ip := net.ParseIP(host)
+	if ip == nil {
+		return false
+	}
+
+	// Check for loopback (127.x.x.x, ::1)
+	if ip.IsLoopback() {
+		return true
+	}
+
+	// Check for private IP ranges (10.x.x.x, 172.16-31.x.x, 192.168.x.x)
+	if ip.IsPrivate() {
+		return true
+	}
+
+	return false
+}
+
 // RequestConfig represents the configuration for an HTTP request
 type RequestConfig struct {
-	Method  string                 `json:"method"`
-	URL     string                 `json:"url"`
-	Params  []KeyValue             `json:"params"`
-	Headers []KeyValue             `json:"headers"`
-	Auth    Auth                   `json:"auth"`
-	Body    Body                   `json:"body"`
+	Method  string     `json:"method"`
+	URL     string     `json:"url"`
+	Params  []KeyValue `json:"params"`
+	Headers []KeyValue `json:"headers"`
+	Auth    Auth       `json:"auth"`
+	Body    Body       `json:"body"`
 }
 
 // KeyValue represents a key-value pair
@@ -72,17 +110,22 @@ type Body struct {
 
 // Response represents the HTTP response
 type Response struct {
-	Status     int                    `json:"status"`
-	StatusText string                 `json:"statusText"`
-	Headers    map[string]string      `json:"headers"`
-	Data       interface{}            `json:"data"`
-	Time       int64                  `json:"time"` // milliseconds
-	Size       int64                  `json:"size"` // bytes
+	Status     int               `json:"status"`
+	StatusText string            `json:"statusText"`
+	Headers    map[string]string `json:"headers"`
+	Data       interface{}       `json:"data"`
+	Time       int64             `json:"time"` // milliseconds
+	Size       int64             `json:"size"` // bytes
 }
 
 // Execute performs the HTTP request
 func (c *Client) Execute(config RequestConfig) (*Response, error) {
 	startTime := time.Now()
+
+	// Check for localhost/private URLs
+	if isPrivateURL(config.URL) {
+		return nil, ErrPrivateURL
+	}
 
 	// Build URL with query parameters
 	requestURL, err := c.buildURL(config.URL, config.Params)
