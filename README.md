@@ -71,45 +71,6 @@ APEye is a full-stack API testing application that provides a clean interface fo
 - PostgreSQL database
 - Better-Auth for authentication (email/password and Google OAuth)
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- Go 1.21+
-- PostgreSQL database
-
-### Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/yourusername/apeye.git
-cd apeye
-```
-
-2. Set up the backend:
-
-```bash
-cd apeye-backend
-cp .env.example .env
-# Configure your database connection and auth settings in .env
-go mod download
-go run cmd/api/main.go
-```
-
-3. Set up the frontend:
-
-```bash
-cd apeye-frontend
-cp .env.example .env.local
-# Configure your API URL and auth settings in .env.local
-npm install
-npm run dev
-```
-
-4. Open http://localhost:3000 in your browser
-
 ## How It Works
 
 APEye uses a proxy architecture where the Go backend executes HTTP requests on behalf of users. This approach avoids CORS restrictions and enables full request customization including custom headers and authentication that browsers would otherwise block.
@@ -125,7 +86,3 @@ When you send a request:
 ## License
 
 MIT License
-
-## Contributing
-
-Contributions are welcome. Please open an issue to discuss proposed changes before submitting a pull request.
