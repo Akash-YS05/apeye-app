@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, DM_Sans } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 
@@ -56,6 +57,7 @@ export default function RootLayout({
             }}
           />
         </ThemeProvider>
+        <Analytics/>
       </body>
     </html>
   );
