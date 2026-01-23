@@ -1,6 +1,7 @@
 import type { HttpMethod, AuthType, BodyType } from '@/types';
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+// Use proxy route to forward requests with cookies to backend
+export const API_BASE_URL = '/api/proxy';
 
 export const HTTP_METHODS: HttpMethod[] = [
   'GET',
