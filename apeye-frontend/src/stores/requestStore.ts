@@ -213,8 +213,49 @@ export const useRequestStore = create<RequestState>((set, get) => ({
       set({ response, isLoading: false });
       toast.success('Request completed');
     } catch (error: any) {
-      set({ isLoading: false });
-      toast.error(error.response?.data?.error || 'Request failed');
+      const errorMessage = error.message || error.response?.data?.error || 'Request failed';
+      const isLocalhost = config.url.includes('localhost') || config.url.includes('127.0.0.1');
+      
+      // Check for CORS/network error on localhost
+      if (isLocalhost && (errorMessage.includes('CORS') || errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError'))) {
+        // Set a helpful error response so user sees it in the response panel
+        set({ 
+          isLoading: false,
+          response: {
+            status: 0,
+            statusText: 'CORS / Network Error',
+            headers: {},
+            data: {
+              error: 'Could not reach your local server',
+              tips: [
+                '1. Make sure your server is running on the specified port',
+                '2. Add CORS headers to your server. Example for Express.js:',
+                '   app.use(cors({ origin: "*" }))',
+                '3. Or use a browser extension like "Allow CORS" to bypass restrictions',
+              ]
+            },
+            time: 0,
+            size: 0,
+          }
+        });
+        toast.error('Cannot reach local server - see response for tips', { duration: 4000 });
+      } else if (errorMessage.includes('CORS')) {
+        set({ 
+          isLoading: false,
+          response: {
+            status: 0,
+            statusText: 'CORS Error',
+            headers: {},
+            data: { error: 'The target server is blocking browser requests. The server needs to allow CORS from this origin.' },
+            time: 0,
+            size: 0,
+          }
+        });
+        toast.error('CORS Error - server is blocking requests', { duration: 4000 });
+      } else {
+        set({ isLoading: false });
+        toast.error(errorMessage);
+      }
     }
   },
 

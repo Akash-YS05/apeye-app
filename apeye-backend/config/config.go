@@ -3,17 +3,18 @@ package config
 import (
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	Server   ServerConfig
-	Database DatabaseConfig
-	Redis    RedisConfig
-	JWT      JWTConfig
-	CORS     CORSConfig
+	Server    ServerConfig
+	Database  DatabaseConfig
+	Redis     RedisConfig
+	JWT       JWTConfig
+	CORS      CORSConfig
 	RateLimit RateLimitConfig
 }
 
@@ -54,7 +55,7 @@ type RateLimitConfig struct {
 }
 
 func Load() *Config {
-		if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found, using environment variables")
 	}
 
@@ -83,7 +84,7 @@ func Load() *Config {
 			RefreshTokenExpiry: 7 * 24 * time.Hour,
 		},
 		CORS: CORSConfig{
-			AllowedOrigins: []string{getEnv("ALLOWED_ORIGINS", "http://localhost:3000")},
+			AllowedOrigins: getEnvSlice("ALLOWED_ORIGINS", []string{"http://localhost:3000"}),
 		},
 		RateLimit: RateLimitConfig{
 			Free: 100,
@@ -95,6 +96,13 @@ func Load() *Config {
 func getEnv(key, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {
 		return value
+	}
+	return defaultValue
+}
+
+func getEnvSlice(key string, defaultValue []string) []string {
+	if value := os.Getenv(key); value != "" {
+		return strings.Split(value, ",")
 	}
 	return defaultValue
 }
