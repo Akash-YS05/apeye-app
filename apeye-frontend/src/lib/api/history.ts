@@ -1,5 +1,5 @@
 import axiosInstance from './axios';
-import type { History } from '@/types';
+import type { History, RequestConfig, ApiResponse } from '@/types';
 
 export const historyApi = {
   // Get user's request history
@@ -8,6 +8,18 @@ export const historyApi = {
       params: { limit },
     });
     return response.data;
+  },
+
+  // Save a history record (for locally executed requests)
+  save: async (config: RequestConfig, apiResponse: ApiResponse): Promise<void> => {
+    await axiosInstance.post('/history', {
+      method: config.method,
+      url: config.url,
+      requestData: config,
+      responseData: apiResponse,
+      statusCode: apiResponse.status,
+      responseTime: apiResponse.time,
+    });
   },
 
   // Delete single history item

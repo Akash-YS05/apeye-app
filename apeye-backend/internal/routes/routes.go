@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/Akash-YS05/apeye-app/apeye-backend/config"
 	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/handlers"
 	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/middleware"
+	"github.com/gin-gonic/gin"
 )
 
 func SetupRoutes(
@@ -12,7 +12,7 @@ func SetupRoutes(
 	cfg *config.Config,
 	requestHandler *handlers.RequestHandler,
 	collectionHandler *handlers.CollectionHandler,
-	historyHandler *handlers.HistoryHandler, 
+	historyHandler *handlers.HistoryHandler,
 ) {
 	// API group
 	api := router.Group("/api")
@@ -34,14 +34,14 @@ func SetupRoutes(
 				userID, _ := c.Get("user_id")
 				userEmail, _ := c.Get("user_email")
 				userName, _ := c.Get("user_name")
-				
+
 				c.JSON(200, gin.H{
 					"id":    userID,
 					"email": userEmail,
 					"name":  userName,
 				})
 			})
-			
+
 			// Execute API request
 			protected.POST("/requests/execute", requestHandler.ExecuteRequest)
 
@@ -58,6 +58,7 @@ func SetupRoutes(
 
 			// History
 			protected.GET("/history", historyHandler.ListHistory)
+			protected.POST("/history", historyHandler.CreateHistory)
 			protected.DELETE("/history/:id", historyHandler.DeleteHistory)
 			protected.DELETE("/history", historyHandler.ClearAllHistory)
 		}

@@ -139,10 +139,30 @@ export const requestsApi = {
   execute: async (config: RequestConfig): Promise<ApiResponse> => {
     // Use browser fetch for localhost/private URLs (backend can't reach them)
     if (isPrivateURL(config.url)) {
-      return executeLocally(config);
+      const response = await executeLocally(config);
+      
+      // Save to history via dedicated API route (not proxy)
+      fetch('/api/history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          method: config.method,
+          url: config.url,
+          requestData: config,
+          responseData: response,
+          statusCode: response.status,
+          responseTime: response.time,
+        }),
+      }).catch(() => {
+        // Silently fail - history save is not critical
+      });
+      
+      return response;
     }
     
     // Use backend proxy for public URLs (avoids CORS issues)
+    // Backend automatically saves to history
     const response = await axiosInstance.post('/requests/execute', config);
     return response.data;
   },

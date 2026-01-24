@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/middleware"
+	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/models"
 	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -18,6 +19,48 @@ func NewHistoryHandler(historyRepo *repository.HistoryRepository) *HistoryHandle
 	return &HistoryHandler{
 		historyRepo: historyRepo,
 	}
+}
+
+// CreateHistoryRequest represents the request body for creating history
+type CreateHistoryRequest struct {
+	Method       string       `json:"method" binding:"required"`
+	URL          string       `json:"url" binding:"required"`
+	RequestData  models.JSONB `json:"requestData"`
+	ResponseData models.JSONB `json:"responseData"`
+	StatusCode   int          `json:"statusCode"`
+	ResponseTime int          `json:"responseTime"`
+}
+
+// CreateHistory saves a history record (for locally executed requests)
+func (h *HistoryHandler) CreateHistory(c *gin.Context) {
+	userID, exists := middleware.GetUserID(c)
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	var req CreateHistoryRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	history := &models.History{
+		UserID:       userID,
+		Method:       models.HTTPMethod(req.Method),
+		URL:          req.URL,
+		RequestData:  req.RequestData,
+		ResponseData: req.ResponseData,
+		StatusCode:   req.StatusCode,
+		ResponseTime: req.ResponseTime,
+	}
+
+	if err := h.historyRepo.Create(history); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save history"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, history)
 }
 
 // ListHistory returns user's request history
