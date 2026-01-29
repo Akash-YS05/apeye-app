@@ -51,5 +51,5 @@ func (r *HistoryRepository) Delete(id string) error {
 
 // DeleteByUserID removes all history for a user
 func (r *HistoryRepository) DeleteByUserID(userID string) error {
-	return r.db.Where("userId = ?", userID).Delete(&models.History{}).Error
+	return r.db.Where(`"userId" = ?`, userID).Delete(&models.History{}).Error
 }
