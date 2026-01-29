@@ -13,6 +13,7 @@ func SetupRoutes(
 	requestHandler *handlers.RequestHandler,
 	collectionHandler *handlers.CollectionHandler,
 	historyHandler *handlers.HistoryHandler,
+	environmentHandler *handlers.EnvironmentHandler,
 ) {
 	// API group
 	api := router.Group("/api")
@@ -61,6 +62,13 @@ func SetupRoutes(
 			protected.POST("/history", historyHandler.CreateHistory)
 			protected.DELETE("/history/:id", historyHandler.DeleteHistory)
 			protected.DELETE("/history", historyHandler.ClearAllHistory)
+
+			// Environments
+			protected.GET("/environments", environmentHandler.ListEnvironments)
+			protected.POST("/environments", environmentHandler.CreateEnvironment)
+			protected.GET("/environments/:id", environmentHandler.GetEnvironment)
+			protected.PUT("/environments/:id", environmentHandler.UpdateEnvironment)
+			protected.DELETE("/environments/:id", environmentHandler.DeleteEnvironment)
 		}
 	}
 }
