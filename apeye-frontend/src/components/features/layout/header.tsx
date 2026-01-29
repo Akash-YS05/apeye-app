@@ -14,6 +14,7 @@ import { useSession, signOut } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
+import EnvironmentSelector from '@/components/features/environments/EnvironmentSelector';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -43,6 +44,8 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
       </div>
 
       <div className="flex items-center gap-1 sm:gap-2">
+        <EnvironmentSelector />
+        
         <div className="text-sm mr-1 sm:mr-2 hidden sm:block">
           <span className="text-muted-foreground">Plan: </span>
           <span className="font-medium capitalize text-primary">{userPlan}</span>

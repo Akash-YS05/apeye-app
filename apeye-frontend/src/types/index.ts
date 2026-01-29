@@ -77,11 +77,11 @@ export interface SavedRequest {
 
 export interface Environment {
   id: string;
-  workspaceId: string;
+  workspace_id: string;
   name: string;
   variables: Record<string, string>;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Workspace {

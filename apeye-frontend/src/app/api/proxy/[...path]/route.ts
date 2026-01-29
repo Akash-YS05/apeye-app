@@ -73,7 +73,7 @@ async function proxyRequest(request: NextRequest, path: string) {
   } catch (error) {
     console.error('Proxy error:', error);
     return NextResponse.json(
-      { error: 'Failed to proxy request' },
+      { error: 'Failed to proxy request to backend', details: String(error) },
       { status: 500 }
     );
   }

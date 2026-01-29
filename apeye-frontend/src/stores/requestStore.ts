@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { RequestConfig, ApiResponse, KeyValue, SavedRequest } from '@/types';
 import { nanoid } from 'nanoid';
 import { requestsApi } from '@/lib/api/requests';
+import { resolveConfigVariables } from '@/lib/variables';
+import { useEnvironmentsStore } from './environmentsStore';
 import toast from 'react-hot-toast';
 
 interface RequestState {
@@ -209,7 +211,12 @@ export const useRequestStore = create<RequestState>((set, get) => ({
     set({ isLoading: true, response: null });
 
     try {
-      const response = await requestsApi.execute(config);
+      // Get active environment variables and resolve them in the config
+      const activeEnv = useEnvironmentsStore.getState().getActiveEnvironment();
+      const variables = activeEnv?.variables || {};
+      const resolvedConfig = resolveConfigVariables(config, variables);
+
+      const response = await requestsApi.execute(resolvedConfig);
       set({ response, isLoading: false });
       toast.success('Request completed');
     } catch (error: any) {

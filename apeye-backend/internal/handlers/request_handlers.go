@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
+	"strings"
 
 	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/middleware"
 	"github.com/Akash-YS05/apeye-app/apeye-backend/internal/services"
@@ -31,9 +33,12 @@ func (h *RequestHandler) ExecuteRequest(c *gin.Context) {
 	// Parse request config
 	var config httpclient.RequestConfig
 	if err := c.ShouldBindJSON(&config); err != nil {
+		log.Printf("JSON binding error: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request configuration: " + err.Error()})
 		return
 	}
+
+	log.Printf("Received request config: Method=%s, URL=%s", config.Method, config.URL)
 
 	// Validate URL
 	if config.URL == "" {
@@ -41,9 +46,21 @@ func (h *RequestHandler) ExecuteRequest(c *gin.Context) {
 		return
 	}
 
+	// Check for unresolved variables in URL (common error)
+	if strings.Contains(config.URL, "{{") {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "URL contains unresolved variables. Please select an environment with the required variables defined.",
+			"url":   config.URL,
+		})
+		return
+	}
+
+	log.Printf("Executing request: %s %s", config.Method, config.URL)
+
 	// Execute request
 	response, err := h.requestService.ExecuteRequest(userID, config)
 	if err != nil {
+		log.Printf("Request execution failed: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to execute request: " + err.Error()})
 		return
 	}
