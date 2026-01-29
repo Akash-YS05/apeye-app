@@ -88,7 +88,7 @@ export default function EnvironmentSelector() {
               <DropdownMenuItem
                 key={env.id}
                 onClick={() => setActiveEnvironment(env.id)}
-                className={`group ${activeEnvironmentId === env.id ? 'bg-accent' : ''}`}
+                className={`group ${activeEnvironmentId === env.id ? 'bg-accent' : ''} my-1`}
               >
                 <span className="flex-1 truncate">{env.name}</span>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100">
