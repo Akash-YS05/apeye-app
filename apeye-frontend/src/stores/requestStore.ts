@@ -5,11 +5,51 @@ import { requestsApi } from '@/lib/api/requests';
 import { resolveConfigVariables } from '@/lib/variables';
 import { useEnvironmentsStore } from './environmentsStore';
 import toast from 'react-hot-toast';
+import { useAgentStore } from './agentStore';
+
+function isLocalOrPrivateURL(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname;
+
+    if (host === 'localhost' || host === '::1' || host === '[::1]') {
+      return true;
+    }
+
+    const ip = host.split('.').map(Number);
+    if (ip.length === 4 && ip.every((n) => !Number.isNaN(n))) {
+      if (ip[0] === 127) return true;
+      if (ip[0] === 10) return true;
+      if (ip[0] === 172 && ip[1] >= 16 && ip[1] <= 31) return true;
+      if (ip[0] === 192 && ip[1] === 168) return true;
+    }
+
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (typeof error === 'object' && error !== null && 'response' in error) {
+    const response = (error as { response?: { data?: { error?: string } } }).response;
+    if (response?.data?.error) {
+      return response.data.error;
+    }
+  }
+
+  return 'Request failed';
+}
 
 interface RequestState {
   config: RequestConfig;
   response: ApiResponse | null;
   isLoading: boolean;
+  showAgentSetupDialog: boolean;
   
   setMethod: (method: RequestConfig['method']) => void;
   setUrl: (url: string) => void;
@@ -37,6 +77,7 @@ interface RequestState {
   executeRequest: () => Promise<void>;
   setResponse: (response: ApiResponse | null) => void;
   setLoading: (loading: boolean) => void;
+  setShowAgentSetupDialog: (open: boolean) => void;
   resetRequest: () => void;
   loadSavedRequest: (request: SavedRequest) => void; // ADD THIS LINE
 }
@@ -62,6 +103,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
   config: initialConfig,
   response: null,
   isLoading: false,
+  showAgentSetupDialog: false,
 
   setMethod: (method) => set((state) => ({
     config: { ...state.config, method },
@@ -219,9 +261,9 @@ export const useRequestStore = create<RequestState>((set, get) => ({
       const response = await requestsApi.execute(resolvedConfig);
       set({ response, isLoading: false });
       toast.success('Request completed');
-    } catch (error: any) {
-      const errorMessage = error.message || error.response?.data?.error || 'Request failed';
-      const isLocalhost = config.url.includes('localhost') || config.url.includes('127.0.0.1');
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error);
+      const isLocalhost = isLocalOrPrivateURL(config.url);
       
       // Check for CORS/network error on localhost
       if (isLocalhost && (errorMessage.includes('CORS') || errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError'))) {
@@ -261,6 +303,10 @@ export const useRequestStore = create<RequestState>((set, get) => ({
         toast.error('CORS Error - server is blocking requests', { duration: 4000 });
       } else {
         set({ isLoading: false });
+        if (isLocalhost && errorMessage.toLowerCase().includes('local agent')) {
+          set({ showAgentSetupDialog: true });
+          useAgentStore.getState().checkHealth();
+        }
         toast.error(errorMessage);
       }
     }
@@ -268,6 +314,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
 
   setResponse: (response) => set({ response }),
   setLoading: (loading) => set({ isLoading: loading }),
+  setShowAgentSetupDialog: (open) => set({ showAgentSetupDialog: open }),
   resetRequest: () => set({ config: initialConfig, response: null }),
   loadSavedRequest: (request: SavedRequest) => {
     // Convert saved request data back to KeyValue arrays
@@ -306,7 +353,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
         headers: headersArray.length > 0 ? headersArray : [
           { id: nanoid(), key: 'Content-Type', value: 'application/json', enabled: true },
         ],
-        //@ts-ignore
+        // @ts-expect-error saved request auth shape is loosely typed from API
         auth: request.auth || { type: 'none' },
         body: {
           type: request.body?.type || 'none',
