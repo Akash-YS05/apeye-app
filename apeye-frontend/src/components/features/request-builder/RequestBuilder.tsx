@@ -146,7 +146,9 @@ export default function RequestBuilder() {
       <LocalAgentSetupDialog
         open={showAgentSetupDialog}
         onOpenChange={setShowAgentSetupDialog}
-        onRetry={checkAgentHealth}
+        onRetry={async () => {
+          await checkAgentHealth();
+        }}
       />
     </div>
   );
