@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import EnvironmentSelector from '@/components/features/environments/EnvironmentSelector';
+import AgentStatusChip from '@/components/features/agent/AgentStatusChip';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -44,6 +45,10 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
       </div>
 
       <div className="flex items-center gap-1 sm:gap-2">
+        <div className="hidden md:block">
+          <AgentStatusChip />
+        </div>
+
         <EnvironmentSelector />
         
         <div className="text-sm mr-1 sm:mr-2 hidden sm:block">

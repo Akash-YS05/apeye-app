@@ -54,6 +54,12 @@ APEye is a full-stack API testing application that provides a clean interface fo
 - Responsive design that works across screen sizes
 - Toast notifications for action feedback
 
+### Local Agent
+
+- Dedicated local HTTP agent for localhost/private network request execution
+- Health-aware frontend integration with agent status indicator
+- Automatic history persistence for local-agent executed requests
+
 ## Tech Stack
 
 ### Frontend
@@ -82,6 +88,29 @@ When you send a request:
 3. The response is captured with timing and size metrics
 4. The result is returned to the frontend for display
 5. The request is automatically saved to your history
+
+For localhost and private network targets, APEye can use the local agent:
+
+1. The frontend sends request configuration to `apeye-agent` running on `127.0.0.1`
+2. The agent executes the request directly from your machine
+3. The response is returned in the same format as backend proxy responses
+4. The frontend saves the result to history through the existing backend history API
+
+## Running the Local Agent
+
+From project root:
+
+```bash
+make agent
+```
+
+The agent listens on `http://127.0.0.1:6363` by default.
+
+Environment variables:
+
+- `AGENT_PORT` - agent port (default: `6363`)
+- `AGENT_GIN_MODE` - gin mode for agent (`debug`/`release`)
+- `AGENT_ALLOWED_ORIGINS` - comma-separated CORS origin allowlist
 
 ## License
 

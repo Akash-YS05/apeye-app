@@ -1,4 +1,4 @@
-.PHONY: help dev-up dev-down backend backend-watch frontend install-frontend install-backend db-connect clean
+.PHONY: help dev-up dev-down backend backend-watch agent frontend install-frontend install-backend db-connect clean
 
 help: ## Show this help message
 	@echo "Available commands:"
@@ -25,6 +25,9 @@ backend: ## Run backend server (manual restart)
 
 backend-watch: ## Run backend with auto-reload (recommended)
 	cd apeye-backend && air
+
+agent: ## Run local agent for localhost requests
+	cd apeye-backend && go run cmd/agent/main.go
 
 frontend: ## Run frontend dev server
 	cd apeye-frontend && npm run dev
