@@ -1,5 +1,6 @@
 import axiosInstance from './axios';
-import { RequestConfig, ApiResponse, KeyValue } from '@/types';
+import { RequestConfig, ApiResponse } from '@/types';
+import { AGENT_BASE_URL } from '@/config/constants';
 
 // Check if URL points to localhost or private IP
 function isPrivateURL(url: string): boolean {
@@ -32,114 +33,51 @@ function isPrivateURL(url: string): boolean {
   }
 }
 
-// Build URL with query parameters
-function buildURL(baseURL: string, params: KeyValue[]): string {
-  const url = new URL(baseURL);
-  params.forEach(p => {
-    if (p.enabled && p.key) {
-      url.searchParams.append(p.key, p.value);
-    }
-  });
-  return url.toString();
-}
-
-// Execute request directly from browser (for localhost/private URLs)
-async function executeLocally(config: RequestConfig): Promise<ApiResponse> {
-  const startTime = performance.now();
-
-  const url = buildURL(config.url, config.params);
-
-  // Build headers
-  const headers: Record<string, string> = {};
-  config.headers.forEach(h => {
-    if (h.enabled && h.key) {
-      headers[h.key] = h.value;
-    }
-  });
-
-  // Set auth headers
-  if (config.auth.type === 'bearer' && config.auth.token) {
-    headers['Authorization'] = `Bearer ${config.auth.token}`;
-  } else if (config.auth.type === 'basic' && config.auth.username && config.auth.password) {
-    headers['Authorization'] = `Basic ${btoa(`${config.auth.username}:${config.auth.password}`)}`;
-  } else if (config.auth.type === 'api-key' && config.auth.apiKey && config.auth.apiValue) {
-    headers[config.auth.apiKey] = config.auth.apiValue;
-  }
-
-  // Build body
-  let body: string | FormData | undefined;
-  if (config.method !== 'GET' && config.method !== 'HEAD') {
-    if (config.body.type === 'json') {
-      headers['Content-Type'] = 'application/json';
-      body = config.body.content;
-    } else if (config.body.type === 'raw') {
-      headers['Content-Type'] = 'text/plain';
-      body = config.body.content;
-    } else if (config.body.type === 'x-www-form-urlencoded' && config.body.formData) {
-      headers['Content-Type'] = 'application/x-www-form-urlencoded';
-      const params = new URLSearchParams();
-      config.body.formData.forEach(f => {
-        if (f.enabled && f.key) params.append(f.key, f.value);
-      });
-      body = params.toString();
-    } else if (config.body.type === 'form-data' && config.body.formData) {
-      const formData = new FormData();
-      config.body.formData.forEach(f => {
-        if (f.enabled && f.key) formData.append(f.key, f.value);
-      });
-      body = formData;
-    }
-  }
-
+async function executeViaLocalAgent(config: RequestConfig): Promise<ApiResponse> {
   try {
-    const response = await fetch(url, {
-      method: config.method,
-      headers,
-      body,
+    const response = await fetch(`${AGENT_BASE_URL}/execute`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(config),
     });
 
-    const endTime = performance.now();
-    const responseText = await response.text();
-    
-    // Try to parse as JSON
-    let data: any;
-    try {
-      data = JSON.parse(responseText);
-    } catch {
-      data = responseText;
+    if (!response.ok) {
+      const payload = await response.json().catch(() => null);
+      const message = payload?.error || `Local agent request failed (${response.status})`;
+      throw new Error(message);
     }
 
-    // Extract headers
-    const responseHeaders: Record<string, string> = {};
-    response.headers.forEach((value, key) => {
-      responseHeaders[key] = value;
-    });
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      headers: responseHeaders,
-      data,
-      time: Math.round(endTime - startTime),
-      size: new Blob([responseText]).size,
-    };
-  } catch (error: any) {
-    // Network error or CORS
-    if (error.message === 'Failed to fetch' || error.name === 'TypeError') {
+    const data = await response.json();
+    return data;
+  } catch (error: unknown) {
+    if (error instanceof TypeError) {
       throw new Error(
-        'CORS Error: The target server is not allowing requests from this browser. Add CORS headers to your server or ensure the server is running.'
+        'Local agent is not running. Start apeye-agent to send localhost/private network requests.'
       );
     }
-    throw new Error(`Request failed: ${error.message}`);
+
+    if (error instanceof Error && error.message.includes('Failed to fetch')) {
+      throw new Error(
+        'Local agent is not running. Start apeye-agent to send localhost/private network requests.'
+      );
+    }
+
+    if (error instanceof Error) {
+      throw new Error(error.message || 'Local agent request failed');
+    }
+
+    throw new Error('Local agent request failed');
   }
 }
 
 export const requestsApi = {
   // Execute an API request
   execute: async (config: RequestConfig): Promise<ApiResponse> => {
-    // Use browser fetch for localhost/private URLs (backend can't reach them)
+    // Use local agent for localhost/private URLs
     if (isPrivateURL(config.url)) {
-      const response = await executeLocally(config);
+      const response = await executeViaLocalAgent(config);
       
       // Save to history via dedicated API route (not proxy)
       fetch('/api/history', {
