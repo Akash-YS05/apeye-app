@@ -12,6 +12,8 @@ import KeyValueInput from './KeyValueInput';
 import AuthTab from './AuthTab';
 import BodyTab from './BodyTab';
 import SaveRequestDialog from '../collections/SaveRequestDialog';
+import LocalAgentSetupDialog from '../agent/LocalAgentSetupDialog';
+import { useAgentStore } from '@/stores/agentStore';
 
 export default function RequestBuilder() {
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
@@ -19,6 +21,7 @@ export default function RequestBuilder() {
   const {
     config,
     isLoading,
+    showAgentSetupDialog,
     setMethod,
     setUrl,
     addParam,
@@ -28,7 +31,10 @@ export default function RequestBuilder() {
     updateHeader,
     removeHeader,
     executeRequest,
+    setShowAgentSetupDialog,
   } = useRequestStore();
+
+  const checkAgentHealth = useAgentStore((state) => state.checkHealth);
 
   return (
     <div className="h-full flex flex-col">
@@ -135,6 +141,14 @@ export default function RequestBuilder() {
       <SaveRequestDialog
         open={saveDialogOpen}
         onOpenChange={setSaveDialogOpen}
+      />
+
+      <LocalAgentSetupDialog
+        open={showAgentSetupDialog}
+        onOpenChange={setShowAgentSetupDialog}
+        onRetry={async () => {
+          await checkAgentHealth();
+        }}
       />
     </div>
   );

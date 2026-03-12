@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAgentStore } from '@/stores/agentStore';
 
 export default function AgentStatusChip() {
-  const { status, checkHealth } = useAgentStore();
+  const { status, version, checkHealth } = useAgentStore();
 
   useEffect(() => {
     checkHealth();
@@ -22,7 +22,7 @@ export default function AgentStatusChip() {
   if (status === 'connected') {
     return (
       <Badge variant="outline" className="text-xs border-green-500/40 text-green-700 dark:text-green-400">
-        Agent Connected
+        {version ? `Agent Connected v${version}` : 'Agent Connected'}
       </Badge>
     );
   }

@@ -98,10 +98,37 @@ For localhost and private network targets, APEye can use the local agent:
 
 ## Running the Local Agent
 
+### For End Users (Windows)
+
+1. Download `apeye-agent.exe` from:
+   - `https://github.com/Akash-YS05/apeye-app/releases/latest/download/apeye-agent.exe`
+2. Open PowerShell in the folder containing the binary.
+3. Run:
+
+```powershell
+.\apeye-agent.exe
+```
+
+4. Keep the process running while testing local URLs.
+5. Optional quick check:
+
+```powershell
+curl http://127.0.0.1:6363/health
+```
+
+### For Project Developers
+
 From project root:
 
 ```bash
 make agent
+```
+
+Or build a Windows binary locally:
+
+```bash
+cd apeye-backend
+GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -o ../apeye-agent.exe ./cmd/agent
 ```
 
 The agent listens on `http://127.0.0.1:6363` by default.
@@ -110,7 +137,23 @@ Environment variables:
 
 - `AGENT_PORT` - agent port (default: `6363`)
 - `AGENT_GIN_MODE` - gin mode for agent (`debug`/`release`)
-- `AGENT_ALLOWED_ORIGINS` - comma-separated CORS origin allowlist
+- `AGENT_ALLOWED_ORIGINS` - optional comma-separated CORS origin allowlist (if empty, agent allows all origins)
+
+## Publishing Windows Agent
+
+This repo includes a GitHub Actions workflow that builds and uploads `apeye-agent.exe` automatically when a GitHub release is published:
+
+- Workflow file: `.github/workflows/release-agent-windows.yml`
+- Trigger: release published
+- Asset uploaded: `apeye-agent.exe`
+
+Release steps:
+
+1. Create and push a version tag (example: `v0.1.1`)
+2. Open GitHub Releases and publish a new release for that tag
+3. Wait for workflow completion
+4. Verify asset exists at:
+   - `https://github.com/Akash-YS05/apeye-app/releases/latest/download/apeye-agent.exe`
 
 ## License
 

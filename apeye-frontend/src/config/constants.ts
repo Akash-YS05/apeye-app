@@ -3,6 +3,9 @@ import type { HttpMethod, AuthType, BodyType } from '@/types';
 // Use proxy route to forward requests with cookies to backend
 export const API_BASE_URL = '/api/proxy';
 export const AGENT_BASE_URL = process.env.NEXT_PUBLIC_AGENT_URL || 'http://127.0.0.1:6363';
+export const AGENT_WINDOWS_DOWNLOAD_URL =
+  process.env.NEXT_PUBLIC_AGENT_WINDOWS_DOWNLOAD_URL ||
+  'https://github.com/Akash-YS05/apeye-app/releases/latest/download/apeye-agent.exe';
 
 export const HTTP_METHODS: HttpMethod[] = [
   'GET',
