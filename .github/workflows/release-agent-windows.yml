@@ -1,0 +1,44 @@
+name: Release Agent (Windows)
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: apeye-backend/go.mod
+
+      - name: Download dependencies
+        working-directory: apeye-backend
+        run: go mod download
+
+      - name: Build Windows agent binary
+        working-directory: apeye-backend
+        shell: bash
+        run: |
+          VERSION="${{ github.event.release.tag_name }}"
+          VERSION="${VERSION#v}"
+          GOOS=windows GOARCH=amd64 CGO_ENABLED=0 \
+            go build \
+            -trimpath \
+            -ldflags "-s -w -X main.agentVersion=${VERSION}" \
+            -o ../apeye-agent.exe \
+            ./cmd/agent
+
+      - name: Upload Windows agent to release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            apeye-agent.exe
