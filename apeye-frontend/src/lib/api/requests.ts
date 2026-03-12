@@ -54,13 +54,13 @@ async function executeViaLocalAgent(config: RequestConfig): Promise<ApiResponse>
   } catch (error: unknown) {
     if (error instanceof TypeError) {
       throw new Error(
-        'Local agent is not running. Start apeye-agent to send localhost/private network requests.'
+        'Local agent is unavailable. Ensure apeye-agent is running and AGENT_ALLOWED_ORIGINS includes this app origin.'
       );
     }
 
     if (error instanceof Error && error.message.includes('Failed to fetch')) {
       throw new Error(
-        'Local agent is not running. Start apeye-agent to send localhost/private network requests.'
+        'Local agent is unavailable. Ensure apeye-agent is running and AGENT_ALLOWED_ORIGINS includes this app origin.'
       );
     }
 
