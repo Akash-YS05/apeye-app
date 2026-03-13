@@ -1,6 +1,7 @@
 import axiosInstance from './axios';
 import { RequestConfig, ApiResponse } from '@/types';
 import { AGENT_BASE_URL } from '@/config/constants';
+import { getStoredAgentToken } from '@/lib/agent-auth';
 
 // Check if URL points to localhost or private IP
 function isPrivateURL(url: string): boolean {
@@ -35,10 +36,16 @@ function isPrivateURL(url: string): boolean {
 
 async function executeViaLocalAgent(config: RequestConfig): Promise<ApiResponse> {
   try {
+    const token = getStoredAgentToken();
+    if (!token) {
+      throw new Error('Local agent token is missing. Pair the app with your running agent.');
+    }
+
     const response = await fetch(`${AGENT_BASE_URL}/execute`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-APEYE-Agent-Token': token,
       },
       body: JSON.stringify(config),
     });
@@ -54,13 +61,13 @@ async function executeViaLocalAgent(config: RequestConfig): Promise<ApiResponse>
   } catch (error: unknown) {
     if (error instanceof TypeError) {
       throw new Error(
-        'Local agent is unavailable. Ensure apeye-agent is running and AGENT_ALLOWED_ORIGINS includes this app origin.'
+        'Local agent is unavailable. Ensure apeye-agent is running and paired with this app token.'
       );
     }
 
     if (error instanceof Error && error.message.includes('Failed to fetch')) {
       throw new Error(
-        'Local agent is unavailable. Ensure apeye-agent is running and AGENT_ALLOWED_ORIGINS includes this app origin.'
+        'Local agent is unavailable. Ensure apeye-agent is running and paired with this app token.'
       );
     }
 

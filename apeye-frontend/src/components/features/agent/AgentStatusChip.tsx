@@ -3,9 +3,11 @@
 import { useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { useAgentStore } from '@/stores/agentStore';
+import { getStoredAgentToken } from '@/lib/agent-auth';
 
 export default function AgentStatusChip() {
-  const { status, version, checkHealth } = useAgentStore();
+  const { status, version, isVersionCompatible, checkHealth } = useAgentStore();
+  const hasToken = !!getStoredAgentToken();
 
   useEffect(() => {
     checkHealth();
@@ -20,6 +22,14 @@ export default function AgentStatusChip() {
   }, [checkHealth]);
 
   if (status === 'connected') {
+    if (!isVersionCompatible) {
+      return (
+        <Badge variant="outline" className="text-xs border-red-500/40 text-red-700 dark:text-red-400">
+          Agent Update Required
+        </Badge>
+      );
+    }
+
     return (
       <Badge variant="outline" className="text-xs border-green-500/40 text-green-700 dark:text-green-400">
         {version ? `Agent Connected v${version}` : 'Agent Connected'}
@@ -30,7 +40,7 @@ export default function AgentStatusChip() {
   if (status === 'disconnected') {
     return (
       <Badge variant="outline" className="text-xs border-amber-500/40 text-amber-700 dark:text-amber-400">
-        Agent Offline
+        {hasToken ? 'Agent Offline' : 'Agent Not Paired'}
       </Badge>
     );
   }

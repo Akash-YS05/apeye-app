@@ -1,4 +1,5 @@
 import { AGENT_BASE_URL } from '@/config/constants';
+import { getStoredAgentToken } from '@/lib/agent-auth';
 
 export interface AgentHealthResponse {
   status: 'ok';
@@ -16,8 +17,16 @@ export async function checkAgentHealth(timeoutMs = 1500): Promise<boolean> {
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
+    const token = getStoredAgentToken();
+    if (!token) {
+      return false;
+    }
+
     const response = await fetch(`${AGENT_BASE_URL}/health`, {
       method: 'GET',
+      headers: {
+        'X-APEYE-Agent-Token': token,
+      },
       signal: controller.signal,
     });
 
@@ -39,8 +48,16 @@ export async function getAgentVersion(timeoutMs = 1500): Promise<string | null> 
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
+    const token = getStoredAgentToken();
+    if (!token) {
+      return null;
+    }
+
     const response = await fetch(`${AGENT_BASE_URL}/version`, {
       method: 'GET',
+      headers: {
+        'X-APEYE-Agent-Token': token,
+      },
       signal: controller.signal,
     });
 
