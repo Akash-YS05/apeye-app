@@ -252,6 +252,25 @@ export const useRequestStore = create<RequestState>((set, get) => ({
 
     set({ isLoading: true, response: null });
 
+    const isLocalhost = isLocalOrPrivateURL(config.url);
+
+    if (isLocalhost) {
+      const isAgentHealthy = await useAgentStore.getState().checkHealth();
+      const { isVersionCompatible } = useAgentStore.getState();
+
+      if (!isAgentHealthy) {
+        set({ isLoading: false, showAgentSetupDialog: true });
+        toast.error('Local agent is not connected. Complete setup to continue.', { duration: 4000 });
+        return;
+      }
+
+      if (!isVersionCompatible) {
+        set({ isLoading: false, showAgentSetupDialog: true });
+        toast.error('Local agent update required. Download latest agent and retry.', { duration: 4000 });
+        return;
+      }
+    }
+
     try {
       // Get active environment variables and resolve them in the config
       const activeEnv = useEnvironmentsStore.getState().getActiveEnvironment();
@@ -303,7 +322,7 @@ export const useRequestStore = create<RequestState>((set, get) => ({
         toast.error('CORS Error - server is blocking requests', { duration: 4000 });
       } else {
         set({ isLoading: false });
-        if (isLocalhost && errorMessage.toLowerCase().includes('local agent')) {
+        if (isLocalhost && (errorMessage.toLowerCase().includes('local agent') || errorMessage.toLowerCase().includes('token'))) {
           set({ showAgentSetupDialog: true });
           useAgentStore.getState().checkHealth();
         }
