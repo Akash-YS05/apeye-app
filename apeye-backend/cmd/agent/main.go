@@ -26,7 +26,7 @@ type runtimeState struct {
 
 func main() {
 	port := getEnv("AGENT_PORT", "6363")
-	ginMode := getEnv("AGENT_GIN_MODE", getEnv("GIN_MODE", "debug"))
+	ginMode := getEnv("AGENT_GIN_MODE", getEnv("GIN_MODE", "release"))
 	allowedOrigins := getEnvSlice("AGENT_ALLOWED_ORIGINS")
 	agentToken, tokenSource, err := resolveAgentToken()
 	if err != nil {
@@ -39,17 +39,20 @@ func main() {
 	state := &runtimeState{startedAt: time.Now().UTC()}
 	router := gin.New()
 	router.Use(gin.Logger(), gin.Recovery())
+	if err := router.SetTrustedProxies(nil); err != nil {
+		log.Fatal("Failed to configure trusted proxies:", err)
+	}
 	if len(allowedOrigins) == 0 {
 		router.Use(cors.New(cors.Config{
 			AllowAllOrigins: true,
 			AllowMethods:    []string{"GET", "POST", "OPTIONS"},
-			AllowHeaders:    []string{"Origin", "Content-Type", "Accept", "Authorization"},
+			AllowHeaders:    []string{"Origin", "Content-Type", "Accept", "Authorization", "X-APEYE-Agent-Token"},
 		}))
 	} else {
 		router.Use(cors.New(cors.Config{
 			AllowOrigins:     allowedOrigins,
 			AllowMethods:     []string{"GET", "POST", "OPTIONS"},
-			AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+			AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "X-APEYE-Agent-Token"},
 			AllowCredentials: false,
 		}))
 	}
