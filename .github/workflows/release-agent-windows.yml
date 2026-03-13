@@ -10,6 +10,10 @@ permissions:
 jobs:
   build-and-upload:
     runs-on: ubuntu-latest
+    env:
+      WINDOWS_SIGN_CERT_BASE64: ${{ secrets.WINDOWS_SIGN_CERT_BASE64 }}
+      WINDOWS_SIGN_CERT_PASSWORD: ${{ secrets.WINDOWS_SIGN_CERT_PASSWORD }}
+      WINDOWS_SIGN_TIMESTAMP_URL: ${{ secrets.WINDOWS_SIGN_TIMESTAMP_URL }}
 
     steps:
       - name: Checkout
@@ -43,18 +47,14 @@ jobs:
           sha256sum apeye-agent.exe > apeye-agent.exe.sha256
 
       - name: Install osslsigncode
-        if: ${{ secrets.WINDOWS_SIGN_CERT_BASE64 != '' && secrets.WINDOWS_SIGN_CERT_PASSWORD != '' }}
+        if: ${{ env.WINDOWS_SIGN_CERT_BASE64 != '' && env.WINDOWS_SIGN_CERT_PASSWORD != '' }}
         run: |
           sudo apt-get update
           sudo apt-get install -y osslsigncode
 
       - name: Sign Windows binary (optional)
-        if: ${{ secrets.WINDOWS_SIGN_CERT_BASE64 != '' && secrets.WINDOWS_SIGN_CERT_PASSWORD != '' }}
+        if: ${{ env.WINDOWS_SIGN_CERT_BASE64 != '' && env.WINDOWS_SIGN_CERT_PASSWORD != '' }}
         shell: bash
-        env:
-          WINDOWS_SIGN_CERT_BASE64: ${{ secrets.WINDOWS_SIGN_CERT_BASE64 }}
-          WINDOWS_SIGN_CERT_PASSWORD: ${{ secrets.WINDOWS_SIGN_CERT_PASSWORD }}
-          WINDOWS_SIGN_TIMESTAMP_URL: ${{ secrets.WINDOWS_SIGN_TIMESTAMP_URL }}
         run: |
           echo "$WINDOWS_SIGN_CERT_BASE64" | base64 -d > windows-signing-cert.p12
           TIMESTAMP_URL="${WINDOWS_SIGN_TIMESTAMP_URL:-http://timestamp.digicert.com}"
