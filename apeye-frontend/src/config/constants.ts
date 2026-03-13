@@ -6,6 +6,7 @@ export const AGENT_BASE_URL = process.env.NEXT_PUBLIC_AGENT_URL || 'http://127.0
 export const AGENT_WINDOWS_DOWNLOAD_URL =
   process.env.NEXT_PUBLIC_AGENT_WINDOWS_DOWNLOAD_URL ||
   'https://github.com/Akash-YS05/apeye-app/releases/latest/download/apeye-agent.exe';
+export const MIN_AGENT_VERSION = process.env.NEXT_PUBLIC_MIN_AGENT_VERSION || '0.1.1';
 
 export const HTTP_METHODS: HttpMethod[] = [
   'GET',
