@@ -37,8 +37,43 @@ jobs:
             -o ../apeye-agent.exe \
             ./cmd/agent
 
+      - name: Generate SHA256 checksum
+        shell: bash
+        run: |
+          sha256sum apeye-agent.exe > apeye-agent.exe.sha256
+
+      - name: Install osslsigncode
+        if: ${{ secrets.WINDOWS_SIGN_CERT_BASE64 != '' && secrets.WINDOWS_SIGN_CERT_PASSWORD != '' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y osslsigncode
+
+      - name: Sign Windows binary (optional)
+        if: ${{ secrets.WINDOWS_SIGN_CERT_BASE64 != '' && secrets.WINDOWS_SIGN_CERT_PASSWORD != '' }}
+        shell: bash
+        env:
+          WINDOWS_SIGN_CERT_BASE64: ${{ secrets.WINDOWS_SIGN_CERT_BASE64 }}
+          WINDOWS_SIGN_CERT_PASSWORD: ${{ secrets.WINDOWS_SIGN_CERT_PASSWORD }}
+          WINDOWS_SIGN_TIMESTAMP_URL: ${{ secrets.WINDOWS_SIGN_TIMESTAMP_URL }}
+        run: |
+          echo "$WINDOWS_SIGN_CERT_BASE64" | base64 -d > windows-signing-cert.p12
+          TIMESTAMP_URL="${WINDOWS_SIGN_TIMESTAMP_URL:-http://timestamp.digicert.com}"
+          osslsigncode sign \
+            -pkcs12 windows-signing-cert.p12 \
+            -pass "$WINDOWS_SIGN_CERT_PASSWORD" \
+            -n "APEye Local Agent" \
+            -i "https://github.com/Akash-YS05/apeye-app" \
+            -h sha256 \
+            -t "$TIMESTAMP_URL" \
+            -in apeye-agent.exe \
+            -out apeye-agent-signed.exe
+          mv apeye-agent-signed.exe apeye-agent.exe
+          rm -f windows-signing-cert.p12
+          sha256sum apeye-agent.exe > apeye-agent.exe.sha256
+
       - name: Upload Windows agent to release assets
         uses: softprops/action-gh-release@v2
         with:
           files: |
             apeye-agent.exe
+            apeye-agent.exe.sha256

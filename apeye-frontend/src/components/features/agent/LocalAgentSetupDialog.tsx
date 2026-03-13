@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Dialog,
   DialogContent,
@@ -11,6 +12,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { AGENT_BASE_URL, AGENT_WINDOWS_DOWNLOAD_URL } from '@/config/constants';
+import { getStoredAgentToken, setStoredAgentToken } from '@/lib/agent-auth';
+import { useAgentStore } from '@/stores/agentStore';
 
 interface LocalAgentSetupDialogProps {
   open: boolean;
@@ -33,6 +36,10 @@ export default function LocalAgentSetupDialog({
 }: LocalAgentSetupDialogProps) {
   const [isRetrying, setIsRetrying] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [token, setToken] = useState(() => getStoredAgentToken());
+  const [pairingSaved, setPairingSaved] = useState(false);
+
+  const setRequiresPairing = useAgentStore((state) => state.setRequiresPairing);
 
   const isWindows = useMemo(() => detectWindows(), []);
   const runCommand = 'apeye-agent.exe';
@@ -56,6 +63,18 @@ export default function LocalAgentSetupDialog({
     } finally {
       setIsRetrying(false);
     }
+  };
+
+  const handleSaveToken = async () => {
+    setStoredAgentToken(token);
+    setPairingSaved(true);
+    setRequiresPairing(!token.trim());
+
+    if (onRetry) {
+      await onRetry();
+    }
+
+    setTimeout(() => setPairingSaved(false), 1500);
   };
 
   return (
@@ -99,16 +118,32 @@ export default function LocalAgentSetupDialog({
                 <p className="text-muted-foreground mt-1">
                   Open PowerShell in the download folder and run:
                 </p>
-                <pre className="mt-2 overflow-x-auto rounded bg-background p-2 text-xs">{runCommand}</pre>
+                <pre className="mt-2 overflow-x-auto rounded bg-background p-2 text-xs">.\{runCommand}</pre>
                 <Button type="button" variant="outline" size="sm" className="mt-2" onClick={handleCopyCommand}>
                   {isCopied ? 'Copied' : 'Copy command'}
                 </Button>
               </div>
 
               <div className="rounded-md border bg-muted/30 p-3">
-                <p className="font-medium">Step 3: verify and retry</p>
+                <p className="font-medium">Step 3: pair with agent token</p>
+                <p className="text-muted-foreground mt-1">
+                  Copy the pairing token shown in the agent terminal and paste it here.
+                </p>
+                <Input
+                  value={token}
+                  onChange={(e) => setToken(e.target.value)}
+                  placeholder="Paste agent token"
+                  className="mt-2"
+                />
+                <Button type="button" variant="outline" size="sm" className="mt-2" onClick={handleSaveToken}>
+                  {pairingSaved ? 'Saved' : 'Save token'}
+                </Button>
+              </div>
+
+              <div className="rounded-md border bg-muted/30 p-3">
+                <p className="font-medium">Step 4: verify and retry</p>
                 <pre className="mt-2 overflow-x-auto rounded bg-background p-2 text-xs">
-curl {AGENT_BASE_URL}/health
+{`curl -H "X-APEYE-Agent-Token: <token>" ${AGENT_BASE_URL}/health`}
                 </pre>
                 <p className="text-muted-foreground mt-2">
                   Keep this process running while testing local URLs.

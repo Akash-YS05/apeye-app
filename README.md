@@ -109,11 +109,13 @@ For localhost and private network targets, APEye can use the local agent:
 .\apeye-agent.exe
 ```
 
-4. Keep the process running while testing local URLs.
-5. Optional quick check:
+4. Copy the pairing token printed in the agent terminal.
+5. In APEye, open Local Agent setup, paste token, and save.
+6. Keep the process running while testing local URLs.
+7. Optional quick check:
 
 ```powershell
-curl http://127.0.0.1:6363/health
+curl -H "X-APEYE-Agent-Token: <token>" http://127.0.0.1:6363/health
 ```
 
 ### For Project Developers
@@ -138,6 +140,7 @@ Environment variables:
 - `AGENT_PORT` - agent port (default: `6363`)
 - `AGENT_GIN_MODE` - gin mode for agent (`debug`/`release`)
 - `AGENT_ALLOWED_ORIGINS` - optional comma-separated CORS origin allowlist (if empty, agent allows all origins)
+- `AGENT_AUTH_TOKEN` - optional static pairing token (if empty, generated at startup and printed in logs)
 
 ## Publishing Windows Agent
 
@@ -145,7 +148,11 @@ This repo includes a GitHub Actions workflow that builds and uploads `apeye-agen
 
 - Workflow file: `.github/workflows/release-agent-windows.yml`
 - Trigger: release published
-- Asset uploaded: `apeye-agent.exe`
+- Assets uploaded: `apeye-agent.exe`, `apeye-agent.exe.sha256`
+- Optional code signing in workflow when these repo secrets are set:
+  - `WINDOWS_SIGN_CERT_BASE64` (base64-encoded `.p12` certificate)
+  - `WINDOWS_SIGN_CERT_PASSWORD`
+  - `WINDOWS_SIGN_TIMESTAMP_URL` (optional)
 
 Release steps:
 
@@ -154,6 +161,16 @@ Release steps:
 3. Wait for workflow completion
 4. Verify asset exists at:
    - `https://github.com/Akash-YS05/apeye-app/releases/latest/download/apeye-agent.exe`
+
+Optional integrity verification (Windows PowerShell):
+
+```powershell
+Invoke-WebRequest "https://github.com/Akash-YS05/apeye-app/releases/latest/download/apeye-agent.exe" -OutFile "apeye-agent.exe"
+Invoke-WebRequest "https://github.com/Akash-YS05/apeye-app/releases/latest/download/apeye-agent.exe.sha256" -OutFile "apeye-agent.exe.sha256"
+$expected = (Get-Content .\apeye-agent.exe.sha256).Split(' ')[0]
+$actual = (Get-FileHash .\apeye-agent.exe -Algorithm SHA256).Hash.ToLower()
+if ($actual -eq $expected) { "Checksum OK" } else { "Checksum mismatch" }
+```
 
 ## License
 
